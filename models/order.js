@@ -23,7 +23,7 @@ let orderSchema = new mongoose.Schema({
             product: { type: String },
             description: { type: String },
             amount: { type: Number },
-            price = { type: Number }
+            price : { type: Number }
         }]
     }
 });
