@@ -9,4 +9,6 @@ let ingredientSchema = new mongoose.Schema({
     calories: {type:Number}    
 });
 
-module.exports = mongoose.model('ingredients', ingredientSchema);
+var model = mongoose.model('ingredients', ingredientSchema);
+model.modelName = 'ingredient';
+module.exports = model;

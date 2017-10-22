@@ -23,7 +23,7 @@ router.route('/user')
 .get(userCtrl.findAllUsers)
 .post(userCtrl.addUser)
 .delete(userCtrl.deleteUserById)
-.put(userCtrl.updateUser);
+.put(userCtrl.updateUserById);
 
 
 module.exports = app;

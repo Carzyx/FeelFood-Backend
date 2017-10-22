@@ -17,4 +17,6 @@ let dishSchema = new mongoose.Schema({
     totalCalories: { type: Number }
 });
 
-module.exports = mongoose.model('dishes', dishSchema);
+var model = mongoose.model('dishes', dishSchema);
+model.modelName = 'dish';
+module.exports = model;

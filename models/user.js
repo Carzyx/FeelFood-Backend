@@ -23,4 +23,6 @@ let userSchema = new mongoose.Schema({
     isAdmin: { type: Boolean }
 });
 
-module.exports = mongoose.model('users', userSchema);
+var model = mongoose.model('users', userSchema);
+model.modelName = "user";
+module.exports = model;
