@@ -3,13 +3,12 @@
 exports.addModel = function (req, res, T) {
     console.log('POST')
     console.log(req.body)
-    
 
     let model = new T(req.body);
-    
+
     model.save()
-        .then(resp => res.status(200).send({ message: `${T.modelName} successfully created. ${T.modelName}: ${resp}` }))
-        .catch(err => res.status(500).send(`There was an error creating a  ${T.modelName}. Please try again later: ${err.message}`));
+        .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
+        .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
 };
 
 exports.deleteModelById = function (req, res, T) {
@@ -17,33 +16,34 @@ exports.deleteModelById = function (req, res, T) {
     console.log(req.query.id)
 
     T.findByIdAndRemove(req.query.id)
-        .then((resp, error) => {
-            if (resp)
-                res.status(200).send({ message: `${T.modelName} successfully removed. ${T.modelName}: ${resp}`})
-            else
-                res.status(200).send({ message: `Can't find ${T.modelName} to remove. ${T.modelName}: ${resp}` })
-
-            console.log(error);
+        .then((resp) => {
+            if (resp) {
+                var modelName = T.modelName;
+                res.status(200).send({ message: `${T.modelName} successfully removed.`, model: resp });
+            }
+            else {
+                res.status(200).send({ message: `Can't find ${T.modelName} to remove with id: ${req.query.id} .` });
+            }
         })
-        .catch(err => res.status(500).send(500, `There was an error removing ${T.modelName}. Please try again later: ${err.message}`));
+        .catch(err => res.status(500).send({ message: `There was an error removing ${T.modelName}, please try again later.`, error: err.message }));
 }
 
 exports.updateModelById = function (req, res, T) {
     console.log('UPDATE')
-    console.log(req.query.id)
     console.log(req.body);
 
-    T.findById(req.query.id).exec()
-        .then((model, error) => {
-            if (error) return res.status(200).send(`${T.modelName} not found with id: ${req.query.id}`)
+    T.findById(req.body.id).exec()
+        .then((model) => {
             if (model) {
-                console.log(` ${T.modelName} found, ${T.modelName}: ${model}`);
-                updateModel(model, req);
-                model.save()
-                    .then(resp => res.status(200).send({ message: `${T.modelName} successfully updated. ${T.modelName}: ${resp} `}))
+                //var model = updateModel(model, req.body);
+                model.update(req.body)
+                    .then(resp => res.status(200).send({ message: `${T.modelName} successfully updated.` }))
+            }
+            else {
+                res.status(200).send({ message: `Can't find ${T.modelName} to update with id: ${req.body.id} .` });
             }
         })
-        .catch(err => res.status(500).send(`There was an error updating ${T.modelName}. Please try again later: ${err.message}`))
+        .catch(err => res.status(500).send({ message: `There was an error updating ${T.modelName}, please try again later.`, error: err.message }));
 };
 
 exports.findAllModels = function (req, res, T) {
@@ -51,14 +51,17 @@ exports.findAllModels = function (req, res, T) {
 
     T.find()
         .then(resp => res.status(200).jsonp(resp))
-        .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}. Please try again later: ${err.message}`));
+        .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
 
+//NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
 function updateModel(oldModel, newModel) {
     for (var index = 0; index < Object.keys(oldModel).length; index++) {
         var element = Object.keys(oldModel)[index];
+
         //Set element if this is not defined        
         oldModel[element] = newModel[element] || oldModel[element];
+
     }
     return oldModel;
 };
