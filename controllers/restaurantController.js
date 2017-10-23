@@ -1,10 +1,12 @@
-const Restaurant=required('../models/restaurant');
+'use strict'
 
-/*
-exports.addRestaurant = (req, res)=> Restaurant.add(req.body);
+const Restaurant = required('../models/restaurant');
 
-exports.deleteRestaurantById = (req, res)=> Restaurant.findOneAndRemove(req.body);
 
-exports.updateRestaurantById = (req, res)=> ApiHelper.updateModelById(req, res, Restaurant);
+exports.addRestaurant = (req, res) => Restaurant.add(req, res, Restaurant);
 
-exports.findAllRestaurant = (req, res)=> ApiHelper.findAllModels(req, res, Restaurant);*/
+exports.deleteRestaurantById = (req, res) => Restaurant.findOneAndRemove(req, res, Restaurant);
+
+exports.updateRestaurantById = (req, res) => ApiHelper.updateModelById(req, res, Restaurant);
+
+exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Restaurant);

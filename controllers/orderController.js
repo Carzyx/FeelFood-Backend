@@ -1,23 +1,24 @@
 'use strict'
 
-const Order = require('../models/order');
+const Order = require('../models/order'),
+    ApiHelper = require('../helpers/api'),
+    User = require('../models/user'),
+    Restaurant = require('../models/restaurant');
 
-exports.addOrder = function (req, res){
-    console.log('POST')
-    console.log(req.body)
+exports.addOrder = (req, res) => ApiHelper.addModel(req, res, Order);
 
-    let order = new Order(req.body);
+exports.deleteOrderById = (req, res) => ApiHelper.deleteModelById(req, res, Order);
 
-    order.save()
-    .then(resp => res.status(200).send({ message: `order successfully created.`, order: resp }))
-    .catch(err => res.status(500).send(`There was an error creating a order. Please try again later: ${err.message}`));
+exports.updateOrderById = (req, res) => ApiHelper.updateModelById(req, res, Order);
+
+exports.findAllOrders = (req, res) => ApiHelper.findAllModels(req, res, Order);
+
+exports.findAllOrdersPopulation = (req, res) => {
+    //Expample to try createa a population
+    var population = {
+        path: User.modelName, match: { username: req.query.username },
+        path: Restaurant.modelName, match: { restaurant: req.query.restaurant }
+    };
+
+    ApiHelper.findAllModelsPopulate(res, res, Order, population)
 };
-
-exports.findAllOrders = function (req, res) {
-    console.log('GET')
-
-    Order.find()
-        .then(resp => res.status(200).jsonp(resp))
-        .catch(err => res.status(500).send(`There was an error searching all orders. Please try again later: ${err.message}`));
-};
-
