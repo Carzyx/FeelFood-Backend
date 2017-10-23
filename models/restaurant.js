@@ -28,7 +28,8 @@ let restaurantSchema = new mongoose.Schema({
         thirdOptions: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
         drinksOptions: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
         othersOptions: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
-    }]
+    }],
+    dishes:[ {name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
 });
 
 var model =  mongoose.model('restaurants', restaurantSchema);

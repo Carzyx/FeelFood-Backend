@@ -26,3 +26,27 @@
         "name" : "Muslo de pollo",
         "calories" : 174
     });
+     db.ingredients.insert({
+         "name" : "Cebolla",
+         "calories" : 24
+     });
+     db.ingredients.insert({
+         "name" : "Espinacas",
+         "calories" : 31
+     });
+     db.ingredients.insert({
+         "name" : "Lechuga",
+         "calories" : 19
+     });
+     db.ingredients.insert({
+         "name" : "Patata",
+         "calories" : 80
+     });
+     db.ingredients.insert({
+         "name" : "Tomate",
+         "calories" : 16
+     });
+     db.ingredients.insert({
+         "name" : "Zanahoria",
+         "calories" : 37
+     });
