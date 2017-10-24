@@ -1,13 +1,18 @@
 'use strict'
 
-const Restaurant = required('../models/restaurant');
+const Restaurant = require('../models/restaurant');
 
 
 exports.addRestaurant = (req, res) =>{
-    if(Restaurant.findOne({name:req.body.name})== undefined)
-        res.status(500).send({ message: `The name of:${req.body.name}is already in use.`});
-    else
-        ApiHelper.addModel(req, res, Restaurant)};
+    Restaurant.findOne({name:req.body.name}).then(function (body) {
+            if(body==undefined)
+                ApiHelper.addModel(req, res, Restaurant);
+            else
+                res.status(500).send({ message: `The name of:${req.body.name} is already in use.`});
+        }
+    )
+
+};
 
 exports.deleteRestaurantById = (req, res) => ApiHelper.deleteModelById(req, res, Restaurant);
 
