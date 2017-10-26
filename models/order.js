@@ -10,6 +10,7 @@ let orderSchema = new mongoose.Schema({
     restaurant: { type: Schema.Types.ObjectId, ref: 'restaurants' },
     createDate: { type: Date },
     status: [{ state: { type: String }, dataState: { type: Date } }],
+    price:{ type: String },
     location: {
         locationName: { type: String },
         address: { type: String },
