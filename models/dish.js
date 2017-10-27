@@ -1,5 +1,5 @@
-'use strict'
-const mongoose = require('mongoose')
+'use strict';
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -17,6 +17,6 @@ let dishSchema = new mongoose.Schema({
     totalCalories: { type: Number }
 });
 
-var model = mongoose.model('dishes', dishSchema);
+let model = mongoose.model('dishes', dishSchema);
 model.modelName = 'dish';
 module.exports = model;

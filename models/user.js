@@ -1,5 +1,5 @@
-'use strict'
-const mongoose = require('mongoose')
+'use strict';
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -23,6 +23,6 @@ let userSchema = new mongoose.Schema({
     isAdmin: { type: Boolean }
 });
 
-var model = mongoose.model('users', userSchema);
+let model = mongoose.model('users', userSchema);
 model.modelName = "user";
 module.exports = model;

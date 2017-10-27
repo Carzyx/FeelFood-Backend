@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -29,6 +29,6 @@ let orderSchema = new mongoose.Schema({
     }
 });
 
-var model = mongoose.model('orders', orderSchema);
+let model = mongoose.model('orders', orderSchema);
 model.modelName = 'order';
 module.exports = model;

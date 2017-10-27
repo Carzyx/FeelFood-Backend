@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-var express = require('express'),
+let express = require('express'),
 app = express(),
 bodyParser = require('body-parser'),
 methodOverride = require('method-override');
@@ -10,11 +10,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
-var router = express.Router();
+let router = express.Router();
 
 // Import Controllers
-var userCtrl = require('../controllers/userController');
-var restaurantCtrl = require('../controllers/restaurantController');
+let userCtrl = require('../controllers/userController');
+let restaurantCtrl = require('../controllers/restaurantController');
 
 app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
