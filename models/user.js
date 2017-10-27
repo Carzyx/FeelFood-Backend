@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
 let userSchema = new mongoose.Schema({
-    username: { type: String },
-    password: { type: String },
-    email: { type: String },
+    username: { type: String, required:true},
+    password: { type: String,required:true},
+    email: { type: String,required:true },
     firstName: { type: String },
     lastName: { type: String },
     locations: [{

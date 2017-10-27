@@ -1,14 +1,31 @@
 'use strict';
 
-exports.addModel = function (req, res, T) {
+exports.addModel = function (req, res, T,condition) {
     console.log('POST');
     console.log(req.body);
+    T.findOne(condition).then(function (resp) {
+        if(!resp){
+        let model = new T(req.body);
 
-    let model = new T(req.body);
-
-    model.save()
-        .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
-        .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
+        model.save()
+            .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
+            .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
+        }
+        else{
+            let con=Object.keys(condition);
+            let text="";
+            if(con=='$or'){
+                for(let i=0;i<condition.$or.length-1;i++){
+                  text=text.concat(Object.keys(condition.$or[i]));
+                  text=text.concat(' or ');
+                }
+                    text=text.concat(Object.keys(condition.$or[condition.$or.length-1]));
+                }
+                else
+                    text=con;
+            res.status(500).send({message:`this ${text} is already in use.`});
+        }
+    });
 };
 
 exports.deleteModelById = function (req, res, T) {
