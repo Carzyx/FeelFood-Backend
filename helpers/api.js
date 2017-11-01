@@ -1,24 +1,41 @@
-'use strict'
+'use strict';
 
-exports.addModel = function (req, res, T) {
-    console.log('POST')
-    console.log(req.body)
+exports.addModel = function (req, res, T,condition) {
+    console.log('POST');
+    console.log(req.body);
+    T.findOne(condition).then(function (resp) {
+        if(!resp){
+        let model = new T(req.body);
 
-    let model = new T(req.body);
-
-    model.save()
-        .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
-        .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
+        model.save()
+            .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
+            .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
+        }
+        else{
+            let con=Object.keys(condition);
+            let text="";
+            if(con=='$or'){
+                for(let i=0;i<condition.$or.length-1;i++){
+                  text=text.concat(Object.keys(condition.$or[i]));
+                  text=text.concat(' or ');
+                }
+                    text=text.concat(Object.keys(condition.$or[condition.$or.length-1]));
+                }
+                else
+                    text=con;
+            res.status(500).send({message:`this ${text} is already in use.`});
+        }
+    });
 };
 
 exports.deleteModelById = function (req, res, T) {
-    console.log('DELETE')
-    console.log(req.query.id)
+    console.log('DELETE');
+    console.log(req.query.id);
 
     T.findByIdAndRemove(req.query.id)
         .then((resp) => {
             if (resp) {
-                var modelName = T.modelName;
+                let modelName = T.modelName;
                 res.status(200).send({ message: `${T.modelName} successfully removed.`, model: resp });
             }
             else {
@@ -26,10 +43,10 @@ exports.deleteModelById = function (req, res, T) {
             }
         })
         .catch(err => res.status(500).send({ message: `There was an error removing ${T.modelName}, please try again later.`, error: err.message }));
-}
+};
 
 exports.updateModelById = function (req, res, T) {
-    console.log('UPDATE')
+    console.log('UPDATE');
     console.log(req.body);
 
     T.findById(req.body.id).exec()
@@ -47,7 +64,7 @@ exports.updateModelById = function (req, res, T) {
 };
 
 exports.findAllModels = function (req, res, T) {
-    console.log('GET')
+    console.log('GET');
 
     T.find()
         .then(resp => res.status(200).jsonp(resp))
@@ -55,7 +72,7 @@ exports.findAllModels = function (req, res, T) {
 };
 
 exports.findAllModelsPopulate = function (req, res, T, population) {
-    console.log('GET')
+    console.log('GET');
     T.find().populate(population)
         .then(resp => res.status(200).jsonp(resp))
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
@@ -63,12 +80,12 @@ exports.findAllModelsPopulate = function (req, res, T, population) {
 
 //NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
 function updateModel(oldModel, newModel) {
-    for (var index = 0; index < Object.keys(oldModel).length; index++) {
-        var element = Object.keys(oldModel)[index];
+    for (let index = 0; index < Object.keys(oldModel).length; index++) {
+        let element = Object.keys(oldModel)[index];
 
         //Set element if this is not defined        
         oldModel[element] = newModel[element] || oldModel[element];
 
     }
     return oldModel;
-};
+}

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Order = require('../models/order'),
     ApiHelper = require('../helpers/api'),
@@ -14,11 +14,11 @@ exports.updateOrderById = (req, res) => ApiHelper.updateModelById(req, res, Orde
 exports.findAllOrders = (req, res) => ApiHelper.findAllModels(req, res, Order);
 
 exports.findAllOrdersPopulation = (req, res) => {
-    //Expample to try createa a population
-    var population = {
+    //Example to try create a population
+    let population = {
         path: User.modelName, match: { username: req.query.username },
-        path: Restaurant.modelName, match: { restaurant: req.query.restaurant }
+        //path: Restaurant.modelName, match: { restaurant: req.query.restaurant }
     };
 
-    ApiHelper.findAllModelsPopulate(res, res, Order, population)
+    ApiHelper.findAllModelsPopulate(res, res, Order, population);
 };
