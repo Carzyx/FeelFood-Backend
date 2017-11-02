@@ -78,6 +78,13 @@ exports.findAllModelsPopulate = function (req, res, T, population) {
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
 
+exports.findOneModel=function (req, res, T, condition, population) {
+    console.log(condition);
+    T.findOne(condition)
+    .then(resp => res.status(200).jsonp(resp))
+    .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
+};
+
 //NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
 function updateModel(oldModel, newModel) {
     for (let index = 0; index < Object.keys(oldModel).length; index++) {

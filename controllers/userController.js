@@ -13,3 +13,7 @@ exports.deleteUserById = (req, res) => ApiHelper.deleteModelById(req, res, User)
 exports.updateUserById = (req, res) => ApiHelper.updateModelById(req, res, User);
 
 exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
+
+exports.findUser=(req,res) => {
+    let conditions={username: req.params.username};
+    ApiHelper.findOneModel(req, res, User,conditions);};

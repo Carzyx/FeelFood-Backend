@@ -31,6 +31,9 @@ router.route('/user')
 .delete(userCtrl.deleteUserById)
 .put(userCtrl.updateUserById);
 
+router.route('/user/:username')
+    .get(userCtrl.findUser);
+
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)
     .post(restaurantCtrl.addRestaurant)
