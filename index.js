@@ -2,7 +2,9 @@
 
 const app = require('./routes/app'),
 mongoose = require('mongoose'),
+api = require('./routes/app'),
 config = require('./config/config');
+
 
 mongoose.Promise = global.Promise;
 

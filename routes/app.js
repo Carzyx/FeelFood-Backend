@@ -1,16 +1,25 @@
 'use strict';
 
 let express = require('express'),
-app = express(),
-bodyParser = require('body-parser'),
-methodOverride = require('method-override');
+    app = express(),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    passport = require('passport'),
+    morgan = require('morgan');
+
+require('../helpers/passport')(passport);
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.use(passport.initialize());
+//app.use(passport.session());
 
 let router = express.Router();
+// Log requests to console
+router.use(morgan('dev'));
+app.use(router);
 
 // Import Controllers
 let userCtrl = require('../controllers/userController');
@@ -23,16 +32,17 @@ app.all('/*', function(req, res, next) {
 });
 
 // API routes
-app.use(router);
+router.post('/register', userCtrl.addUser);
+router.post('/authenticate', userCtrl.signIn);
 
 router.route('/user')
-.get(userCtrl.findAllUsers)
-.post(userCtrl.addUser)
-.delete(userCtrl.deleteUserById)
-.put(userCtrl.updateUserById);
+    .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers)
+    .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
+    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
+    .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/:username')
-    .get(userCtrl.findUser);
+    .get(passport.authenticate('jwt', { session: false }), userCtrl.findUser);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)
@@ -40,9 +50,4 @@ router.route('/restaurant')
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
 
-
-
 module.exports = app;
-
-
-

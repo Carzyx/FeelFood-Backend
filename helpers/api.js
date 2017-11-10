@@ -1,7 +1,6 @@
 'use strict';
 
 exports.addModel = function (req, res, T,condition) {
-    console.log('POST');
     console.log(req.body);
     T.findOne(condition).then(function (resp) {
         if(!resp){
@@ -29,7 +28,6 @@ exports.addModel = function (req, res, T,condition) {
 };
 
 exports.deleteModelById = function (req, res, T) {
-    console.log('DELETE');
     console.log(req.query.id);
 
     T.findByIdAndRemove(req.query.id)
@@ -46,7 +44,6 @@ exports.deleteModelById = function (req, res, T) {
 };
 
 exports.updateModelById = function (req, res, T) {
-    console.log('UPDATE');
     console.log(req.body);
 
     T.findById(req.body.id).exec()
@@ -64,15 +61,12 @@ exports.updateModelById = function (req, res, T) {
 };
 
 exports.findAllModels = function (req, res, T) {
-    console.log('GET');
-
     T.find()
         .then(resp => res.status(200).jsonp(resp))
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
 
 exports.findAllModelsPopulate = function (req, res, T, population) {
-    console.log('GET');
     T.find().populate(population)
         .then(resp => res.status(200).jsonp(resp))
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
