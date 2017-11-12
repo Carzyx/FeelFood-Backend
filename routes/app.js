@@ -17,19 +17,29 @@ app.use(passport.initialize());
 //app.use(passport.session());
 
 let router = express.Router();
+app.use(router);
+
 // Log requests to console
 router.use(morgan('dev'));
-app.use(router);
+
+//Implements CORS
+router.all('/*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', "GET,PUT,POST,DELETE,OPTIONS");
+
+    res.header('Access-Control-Allow-Headers', "Content-Type, Authorization, Content-Length, X-Requested-With,X-Custom-Header,Origin");
+    res.header('Access-Control-Allow-Credentials', "true");
+    if ('OPTIONS' === req.method) {
+        res.status(200).send();
+    }
+    else {
+        next();
+    }
+});
 
 // Import Controllers
 let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
-
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-});
 
 // API routes
 router.post('/register', userCtrl.addUser);

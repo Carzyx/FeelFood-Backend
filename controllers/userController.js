@@ -8,7 +8,7 @@ const User = require('../models/user'),
 
 exports.addUser = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.username) {
-        res.status(404).send({message: 'Please enter all fields.'});
+        res.status(400).send({message: 'Please enter all fields.'});
     } else {
         let conditions = {$or: [{email: req.body.email}, {username: req.body.username}]};
         ApiHelper.addModel(req, res, User, conditions);
@@ -26,7 +26,7 @@ exports.signIn = (req,res) => {
             return res.status(200).send({
                 message: 'Authenticated', token: 'JWT ' + token,
             });
-        } else return res.status(404).send({message: 'User or password is not correct!!!'});
+        } else return res.status(400).send({message: 'User or password is not correct!!!'});
     }).select('+password');
 };
 
