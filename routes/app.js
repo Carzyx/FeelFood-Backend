@@ -42,8 +42,11 @@ let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
 
 // API routes
-router.post('/register', userCtrl.addUser);
-router.post('/authenticate', userCtrl.signIn);
+router.route('/register')
+    .post(userCtrl.addUser);
+    
+router.route('/authenticate')
+    .post(userCtrl.signIn);
 
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers)
