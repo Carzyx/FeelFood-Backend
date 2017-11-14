@@ -1,160 +1,368 @@
 {
-	"id": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-	"name": "FeelFood_NodeJs",
-	"description": "",
-	"order": [],
-	"folders": [
+	"info": {
+		"name": "FeelFood_NodeJs",
+		"_postman_id": "0354372f-be8d-0a74-1988-bd6ca0890056",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
 		{
 			"name": "User",
 			"description": "",
-			"collectionId": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-			"order": [
-				"acb34974-4b0d-f1be-9418-f64afbe285bd",
-				"f584b3d9-a66f-c746-04bc-88ecc7146c31",
-				"854fe5ae-a907-a386-2e81-ce397377151a",
-				"964132fc-71b9-eb74-e8ff-e72f864eac65"
-			],
-			"owner": 0,
-			"folders_order": [],
-			"id": "1bb676d4-ef19-cd42-0786-ec64da3c70eb"
-		}
-	],
-	"folders_order": [
-		"1bb676d4-ef19-cd42-0786-ec64da3c70eb"
-	],
-	"timestamp": 1508680245317,
-	"owner": 0,
-	"public": false,
-	"requests": [
-		{
-			"id": "854fe5ae-a907-a386-2e81-ce397377151a",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+			"item": [
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3001/user?id=59ecda20f21f363df478f03e",
-			"queryParams": [
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"username\":  \"testOne\",\r\n    \"password\":  \"test1234\",\r\n    \"email\":  \"testOne@test.test\",\r\n    \"firstName\":  \"One\",\r\n    \"lastName\":  \"Two\",\r\n    \"country\": \"ES\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
 				{
-					"key": "id",
-					"value": "59ecda20f21f363df478f03e",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3001/user?id=59ecda20f21f363df478f03e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "59ecda20f21f363df478f03e",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\" : \"59ecda20f21f363df478f03e\",\r\n\t\"username\":  \"popopo\",\r\n    \"password\":  \"popopo\",\r\n    \"email\":  \"popopo@test.test\",\r\n    \"firstName\":  \"opopo\",\r\n    \"lastName\":  \"popopo\",\r\n    \"country\": \"popopo\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user"
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
-			],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "DELETE",
-			"collectionId": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Remove user",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1508695583345,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "1bb676d4-ef19-cd42-0786-ec64da3c70eb",
-			"rawModeData": ""
+			]
 		},
 		{
-			"id": "964132fc-71b9-eb74-e8ff-e72f864eac65",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:3001/user",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "PUT",
-			"collectionId": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Update user",
+			"name": "Restaurant",
 			"description": "",
-			"descriptionFormat": "html",
-			"time": 1508698247544,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "1bb676d4-ef19-cd42-0786-ec64da3c70eb",
-			"rawModeData": "{\r\n\t\"id\" : \"59ecda20f21f363df478f03e\",\r\n\t\"username\":  \"popopo\",\r\n    \"password\":  \"popopo\",\r\n    \"email\":  \"popopo@test.test\",\r\n    \"firstName\":  \"opopo\",\r\n    \"lastName\":  \"popopo\",\r\n    \"country\": \"popopo\"\r\n}"
+			"item": [
+				{
+					"name": "Create restaurant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"username\":  \"testOne\",\r\n    \"name\":  \"test1234\",\r\n    \"email\":  \"testOne@test.test\",\r\n    \"firstName\":  \"One\",\r\n    \"lastName\":  \"Two\",\r\n    \"country\": \"ES\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/restaurant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"restaurant"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get restaurant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/restaurant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"restaurant"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update restaurant",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59fa0a377f26047ad6021ef9\",\n    \"username\": \"nballelo\",\n    \"password\": \"1234\",\n    \"name\": \"Bulli\",\n    \"email\": \"n.balle.lo@gmail.com\",\n    \"phone\": 123456789,\n    \"dishes\": [],\n    \"menus\": []\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/restaurant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"restaurant"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"id": "acb34974-4b0d-f1be-9418-f64afbe285bd",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+			"name": "Ingredients",
+			"description": "",
+			"item": [
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+					"name": "getIngredient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59fa0a377f26047ad6021ef9\",\n    \"username\": \"nballelo\",\n    \"password\": \"1234\",\n    \"name\": \"Bulli\",\n    \"email\": \"n.balle.lo@gmail.com\",\n    \"phone\": 123456789,\n    \"dishes\": [],\n    \"menus\": []\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/ingredient/Jamón",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"ingredient",
+								"Jamón"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "addIngredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jamón\",\n    \"calories\": 164\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/ingredient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"ingredient"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Ingredient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59fa0a38de1fac9afc0168b7\",\n    \"name\": \"Jamón\",\n    \"calories\": 163\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/ingredient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"ingredient"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Ingredient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\": \"5a0adc9efa9be3333cf98f40\",\n    \"name\": \"Jamón\",\n    \"calories\": 163\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/ingredient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"ingredient"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "get All Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"59fa0a377f26047ad6021ef9\",\n    \"username\": \"nballelo\",\n    \"password\": \"1234\",\n    \"name\": \"Bulli\",\n    \"email\": \"n.balle.lo@gmail.com\",\n    \"phone\": 123456789,\n    \"dishes\": [],\n    \"menus\": []\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/ingredient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"ingredient"
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
-			],
-			"url": "http://localhost:3001/user",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "POST",
-			"collectionId": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Create user",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1508680537999,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "1bb676d4-ef19-cd42-0786-ec64da3c70eb",
-			"rawModeData": "{\r\n\t\"username\":  \"testOne\",\r\n    \"password\":  \"test1234\",\r\n    \"email\":  \"testOne@test.test\",\r\n    \"firstName\":  \"One\",\r\n    \"lastName\":  \"Two\",\r\n    \"country\": \"ES\"\r\n}"
-		},
-		{
-			"id": "f584b3d9-a66f-c746-04bc-88ecc7146c31",
-			"headers": "",
-			"headerData": [],
-			"url": "http://localhost:3001/user",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "GET",
-			"collectionId": "2c8282e1-448b-41e5-aab4-bd25f4a42f0d",
-			"data": null,
-			"dataMode": "params",
-			"name": "Get users",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1508680646284,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"isFromCollection": true,
-			"collectionRequestId": "f584b3d9-a66f-c746-04bc-88ecc7146c31",
-			"folder": "1bb676d4-ef19-cd42-0786-ec64da3c70eb"
+			]
 		}
 	]
 }

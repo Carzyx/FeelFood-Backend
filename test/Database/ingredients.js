@@ -1,52 +1,52 @@
      db.ingredients.insert({
-     "name" : "Filetes de cerdo",
+     "name" : "filetes de cerdo",
         "calories" : 196
     });
      db.ingredients.insert({
-        "name" : "Filetes de pavo",
+        "name" : "filetes de pavo",
         "calories" : 189
     });
     db.ingredients.insert({
-        "name" : "Costillas de cerdo",
+        "name" : "costillas de cerdo",
         "calories" : 898
     });
     db.ingredients.insert({
-        "name" : "Hígado de pollo",
+        "name" : "hígado de pollo",
         "calories" : 134
     });
     db.ingredients.insert({
-        "name" : "Filete de lomo",
+        "name" : "filete de lomo",
         "calories" : 194
     });
     db.ingredients.insert({
-        "name" : "Jamón",
+        "name" : "jamón",
         "calories" : 163
     });
     db.ingredients.insert({
-        "name" : "Muslo de pollo",
+        "name" : "muslo de pollo",
         "calories" : 174
     });
      db.ingredients.insert({
-         "name" : "Cebolla",
+         "name" : "cebolla",
          "calories" : 24
      });
      db.ingredients.insert({
-         "name" : "Espinacas",
+         "name" : "espinacas",
          "calories" : 31
      });
      db.ingredients.insert({
-         "name" : "Lechuga",
+         "name" : "lechuga",
          "calories" : 19
      });
      db.ingredients.insert({
-         "name" : "Patata",
+         "name" : "patata",
          "calories" : 80
      });
      db.ingredients.insert({
-         "name" : "Tomate",
+         "name" : "tomate",
          "calories" : 16
      });
      db.ingredients.insert({
-         "name" : "Zanahoria",
+         "name" : "zanahoria",
          "calories" : 37
      });

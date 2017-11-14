@@ -40,11 +40,12 @@ router.all('/*', function (req, res, next) {
 // Import Controllers
 let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
+let ingredientCtrl = require ('../controllers/IngredientController');
 
 // API routes
 router.route('/register')
     .post(userCtrl.addUser);
-    
+
 router.route('/authenticate')
     .post(userCtrl.signIn);
 
@@ -55,12 +56,31 @@ router.route('/user')
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/:username')
-    .get(passport.authenticate('jwt', { session: false }), userCtrl.findUser);
+    .get(userCtrl.findUser);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)
     .post(restaurantCtrl.addRestaurant)
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
+router.route('/restaurant/dish')
+    .get(restaurantCtrl.findAllRestaurant)
+    .post(restaurantCtrl.addRestaurant)
+    .delete(restaurantCtrl.deleteRestaurantById)
+    .put(restaurantCtrl.updateRestaurantById);
+
+router.route('/restaurant/:name')
+    .get(restaurantCtrl.findRestaurant);
+
+router.route('/ingredient')
+    .get(ingredientCtrl.findAllIngredients)
+    .post(ingredientCtrl.addIngredient)
+    .delete(ingredientCtrl.deleteIngredientById)
+    .put(ingredientCtrl.updateIngredientById);
+router.route('/ingredient/:name')
+    .get(ingredientCtrl.findIngredient);
 
 module.exports = app;
+
+
+

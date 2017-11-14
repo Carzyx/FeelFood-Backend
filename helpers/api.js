@@ -28,9 +28,9 @@ exports.addModel = function (req, res, T,condition) {
 };
 
 exports.deleteModelById = function (req, res, T) {
-    console.log(req.query.id);
+    console.log(req.body._id);
 
-    T.findByIdAndRemove(req.query.id)
+    T.findByIdAndRemove(req.body._id)
         .then((resp) => {
             if (resp) {
                 let modelName = T.modelName;
@@ -46,7 +46,7 @@ exports.deleteModelById = function (req, res, T) {
 exports.updateModelById = function (req, res, T) {
     console.log(req.body);
 
-    T.findById(req.body.id).exec()
+    T.findById(req.body._id).exec()
         .then((model) => {
             if (model) {
                 //var model = updateModel(model, req.body);
@@ -73,11 +73,15 @@ exports.findAllModelsPopulate = function (req, res, T, population) {
 };
 
 exports.findOneModel=function (req, res, T, condition, population) {
-    console.log(condition);
     T.findOne(condition)
     .then(resp => res.status(200).jsonp(resp))
     .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
+exports.findModels=function (req, res, T, condition, population){
+    T.find(condition)
+    .then(resp => res.status(200).jsonp(resp))
+    .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
+}
 
 //NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
 function updateModel(oldModel, newModel) {
