@@ -17,6 +17,20 @@ exports.updateRestaurantById = (req, res) => ApiHelper.updateModelById(req, res,
 
 exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Restaurant);
 
-exports.findRestaurant=(req,res)=> Restaurant.findOne({name:req.body.name});
+exports.findRestaurant=(req,res)=>
+{
+    let conditions={name: req.params.name};
+    ApiHelper.findOneModel(req,res,Restaurant,conditions);
+}
 
-exports.findRestaurants=(req,res)=> Restaurant.find({name:req.body.name});
+exports.findRestaurants=(req,res)=>{
+    let conditions={name: req.body.name};
+    ApiHelper.findModels(req,res,Restaurant,conditions);
+}
+
+//DISHES
+
+exports.addDish=(req,res)=>{
+    let conditions={name: req.body.name};
+    ApiHelper.findModels(req,res,Restaurant,conditions);
+}
