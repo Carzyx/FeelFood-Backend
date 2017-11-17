@@ -38,18 +38,13 @@ let userSchema = new mongoose.Schema({
         enum: ['Client', 'Restaurant', 'Admin'],
         default: 'Client'
     },
-    provider_id: {
-        type: String,
-        unique: true
-    },
     avatar: String,
-    token: String,
     signupDate: {type: Date, default: Date.now()},
     lastLogin: Date
 });
 
 userSchema.pre('save', function (next) {
-    var user = this;
+    let user = this;
     if (this.isModified('password') || this.isNew) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) return next(err);
