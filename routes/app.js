@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 
 let router = express.Router();
 app.use(router);
@@ -56,13 +56,13 @@ router.route('/authenticate')
     .post(userCtrl.signIn);
 
 router.route('/user')
-    .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers)
+    .get(userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
-router.route('/user/:username')
-    .get(passport.authenticate('jwt', { session: false }), userCtrl.findUser);
+router.route('/user/all')
+    .get(userCtrl.findAllUsers);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)
