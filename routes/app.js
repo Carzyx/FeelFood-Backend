@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(passport.initialize());
-//app.use(passport.session());
+app.use(passport.session());
 
 let router = express.Router();
 app.use(router);
@@ -46,11 +46,17 @@ let ingredientCtrl = require ('../controllers/IngredientController');
 router.route('/register')
     .post(userCtrl.addUser);
 
+router.route('/authenticate/facebook')
+    .get(passport.authenticate('facebook', { scope : ['email'] }));
+
+router.route('/auth/facebook/callback')
+    .get(passport.authenticate('facebook', { successRedirect: 'http://localhost:4200/mangement', failureRedirect: 'http://localhost:4200/login' }));
+
 router.route('/authenticate')
     .post(userCtrl.signIn);
 
 router.route('/user')
-    .get(userCtrl.findUser)
+    .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
