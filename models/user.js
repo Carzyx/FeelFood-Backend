@@ -13,21 +13,13 @@ let userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
         select: false
     },
     email: {
         type: String,
         lowercase: true,
-        required:true,
+        required: true,
         unique:true
-    },
-    facebookProvider: {
-        type: {
-            id: String,
-            token: String
-        },
-        select: false
     },
     firstName: String,
     lastName: String,
@@ -46,6 +38,12 @@ let userSchema = new mongoose.Schema({
         enum: ['Client', 'Restaurant', 'Admin'],
         default: 'Client'
     },
+    provider_id: {
+        type: String,
+        unique: true
+    },
+    avatar: String,
+    token: String,
     signupDate: {type: Date, default: Date.now()},
     lastLogin: Date
 });
