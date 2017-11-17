@@ -37,6 +37,6 @@ exports.updateUserById = (req, res) => ApiHelper.updateModelById(req, res, User)
 exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
 
 exports.findUser=(req,res) => {
-    let conditions={username: req.params.username};
+    let conditions={username: req.query.username};
     ApiHelper.findOneModel(req, res, User,conditions);
 };
