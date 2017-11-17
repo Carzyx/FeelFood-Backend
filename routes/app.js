@@ -5,7 +5,9 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     passport = require('passport'),
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    config = require('../config/config'),
+    jwt = require('jsonwebtoken');
 
 require('../helpers/passport')(passport);
 
@@ -43,26 +45,38 @@ let restaurantCtrl = require('../controllers/restaurantController');
 let ingredientCtrl = require ('../controllers/IngredientController');
 
 // API routes
-router.route('/register')
-    .post(userCtrl.addUser);
 
-router.route('/authenticate/facebook')
+router.route('/')
+    .get(function (req,res) {
+        res.send('FeelFood Api Server running!');
+    });
+
+
+router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope : ['email'] }));
 
 router.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', { successRedirect: 'http://localhost:4200/mangement', failureRedirect: 'http://localhost:4200/login' }));
+    .get(passport.authenticate('facebook', { session: false,  failureRedirect: 'http://localhost:4200/login' }), function (req,res) {
+        let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
+            expiresIn: 10800 //Seconds
+        });
+        res.redirect('http://localhost:4200/auth/' + token);
+    });
 
 router.route('/authenticate')
     .post(userCtrl.signIn);
 
+router.route('/register')
+    .post(userCtrl.addUser);
+
 router.route('/user')
-    .get(userCtrl.findUser)
+    .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
-    .get(userCtrl.findAllUsers);
+    .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)

@@ -6,7 +6,7 @@ const User = require('../models/user'),
 
 module.exports = function (passport) {
 
-    var opts = {};
+    let opts = {};
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
     opts.secretOrKey = config.secret;
 
@@ -24,12 +24,10 @@ module.exports = function (passport) {
         callbackURL	    : '/auth/facebook/callback',
         profileFields   : ['id', 'name', 'displayName', 'emails', 'photos']
     }, function(accessToken, refreshToken, profile, done) {
-        User.findOne({provider_id: profile.id}, function(err, user) {
+        User.findOne({email: profile.emails[0].value}, function(err, user) {
             if(err) throw(err);
             if(!err && user!= null) return done(null, user);
-            var newUser = new User({
-                provider_id	: profile.id,
-                token: accessToken,
+            let newUser = new User({
                 email   	: profile.emails[0].value,
                 username  : profile.displayName,
                 firstName	: profile.name.givenName,

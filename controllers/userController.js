@@ -16,16 +16,14 @@ exports.addUser = (req, res) => {
 };
 
 exports.signIn = (req,res) => {
-    User.findOne({username: req.body.username}, function (err,user) {
+    User.findOne({email: req.body.email}, function (err,user) {
         if (err) return res.status(500).send({message: err});
         if (!user) return res.status(404).send({message: 'User not found.'});
         if (bcrypt.compareSync(req.body.password, user.password)) {
-            var token = jwt.sign({username: user.username, email: user.email, _id: user.id}, config.secret, {
+            let token = jwt.sign({username: user.username, email: user.email, _id: user.id}, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            return res.status(200).send({
-                message: 'Authenticated', token: 'JWT ' + token,
-            });
+            return res.status(200).send({ message: 'Authenticated', token: token });
         } else return res.status(400).send({message: 'User or password is not correct!!!'});
     }).select('+password');
 };
