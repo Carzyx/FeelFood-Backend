@@ -48,7 +48,7 @@ let ingredientCtrl = require ('../controllers/IngredientController');
 
 router.route('/')
     .get(function (req,res) {
-        res.send('FeelFood Api Server running!');
+        res.status(200).send('FeelFood Api Server running!');
     });
 
 
@@ -63,10 +63,9 @@ router.route('/auth/facebook/callback')
         res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
     });
 
-router.route('/authenticate')
-    .post(userCtrl.signIn);
-
-router.route('/register')
+router.route('/login')
+    .post(userCtrl.loginUser);
+router.route('/signup')
     .post(userCtrl.addUser);
 
 router.route('/user')

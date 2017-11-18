@@ -1,28 +1,28 @@
 'use strict';
 
-exports.addModel = function (req, res, T,condition) {
+exports.addModel = function (req, res, T, condition) {
     console.log(req.body);
     T.findOne(condition).then(function (resp) {
-        if(!resp){
-        let model = new T(req.body);
+        if (!resp) {
+            let model = new T(req.body);
 
-        model.save()
-            .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp }))
-            .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
+            model.save()
+                .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp , success: true }))
+                .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
         }
-        else{
-            let con=Object.keys(condition);
-            let text="";
-            if(con=='$or'){
-                for(let i=0;i<condition.$or.length-1;i++){
-                  text=text.concat(Object.keys(condition.$or[i]));
-                  text=text.concat(' or ');
+        else {
+            let con = Object.keys(condition);
+            let text = "";
+            if (con == '$or') {
+                for (let i = 0; i < condition.$or.length - 1; i++) {
+                    text = text.concat(Object.keys(condition.$or[i]));
+                    text = text.concat(' or ');
                 }
-                    text=text.concat(Object.keys(condition.$or[condition.$or.length-1]));
-                }
-                else
-                    text=con;
-            res.status(500).send({message:`this ${text} is already in use.`});
+                text = text.concat(Object.keys(condition.$or[condition.$or.length - 1]));
+            }
+            else
+                text = con;
+            res.status(200).send({ message: `this ${text} is already in use.`, success: false});
         }
     });
 };
@@ -72,15 +72,15 @@ exports.findAllModelsPopulate = function (req, res, T, population) {
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
 
-exports.findOneModel=function (req, res, T, condition, population) {
+exports.findOneModel = function (req, res, T, condition, population) {
     T.findOne(condition)
-    .then(resp => res.status(200).jsonp(resp))
-    .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
+        .then(resp => res.status(200).jsonp(resp))
+        .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 };
-exports.findModels=function (req, res, T, condition, population){
+exports.findModels = function (req, res, T, condition, population) {
     T.find(condition)
-    .then(resp => res.status(200).jsonp(resp))
-    .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
+        .then(resp => res.status(200).jsonp(resp))
+        .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 }
 
 //NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
