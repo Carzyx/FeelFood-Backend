@@ -60,7 +60,7 @@ router.route('/auth/facebook/callback')
         let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
             expiresIn: 10800 //Seconds
         });
-        res.redirect('http://localhost:4200/auth/' + token);
+        res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
     });
 
 router.route('/authenticate')

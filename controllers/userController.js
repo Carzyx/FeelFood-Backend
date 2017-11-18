@@ -23,7 +23,8 @@ exports.signIn = (req,res) => {
             let token = jwt.sign({username: user.username, email: user.email, _id: user.id}, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            return res.status(200).send({ message: 'Authenticated', token: token });
+            delete user._doc.password;
+            return res.status(200).send({ message: 'Authenticated', token: token, user: user });
         } else return res.status(400).send({message: 'User or password is not correct!!!'});
     }).select('+password');
 };
