@@ -37,7 +37,7 @@ exports.deleteModelById = function (req, res, T) {
                 res.status(200).send({ message: `${T.modelName} successfully removed.`, model: resp });
             }
             else {
-                res.status(200).send({ message: `Can't find ${T.modelName} to remove with id: ${req.query.id} .` });
+                res.status(400).send({ message: `Can't find ${T.modelName} to remove with id: ${req.query.id} .` });
             }
         })
         .catch(err => res.status(500).send({ message: `There was an error removing ${T.modelName}, please try again later.`, error: err.message }));
