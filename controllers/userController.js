@@ -8,24 +8,34 @@ const User = require('../models/user'),
 
 exports.addUser = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.username) {
-        res.status(400).send({message: 'Please enter all fields.'});
+        res.status(400).send({ message: 'Please enter all fields.' });
     } else {
-        let conditions = {$or: [{email: req.body.email}, {username: req.body.username}]};
+        let conditions = { $or: [{ email: req.body.email }, { username: req.body.username }] };
         ApiHelper.addModel(req, res, User, conditions);
     }
 };
 
-exports.signIn = (req,res) => {
-    User.findOne({email: req.body.email}, function (err,user) {
-        if (err) return res.status(500).send({message: err});
-        if (!user) return res.status(404).send({message: 'User not found.'});
-        if (bcrypt.compareSync(req.body.password, user.password)) {
-            let token = jwt.sign({username: user.username, email: user.email, _id: user.id}, config.secret, {
+exports.loginUser = (req, res) => {
+
+    let conditions = { email: req.body.email };
+    User.findOne(conditions, function (err, resp) {
+
+        if (err)
+            return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
+
+        if (!resp)
+            return res.status(200).send({ message: 'User not found', user: resp });
+
+        //1º validate password hash are equals or 2º validate password decoded with password encoded.
+        if (req.body.password === resp.password || bcrypt.compareSync(req.body.password, resp.password)) {
+
+            let token = jwt.sign({ username: resp.username, email: resp.email, _id: resp.id }, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            delete user._doc.password;
-            return res.status(200).send({ message: 'Authenticated', token: token, user: user });
-        } else return res.status(400).send({message: 'User or password is not correct!!!'});
+            delete resp._doc.password;
+            return res.status(200).send({ message: 'Authenticated', token: token, user: resp });
+        }
+        return res.status(200).send({ message: 'No Authenticated', token: null, user: resp });
     }).select('+password');
 };
 
@@ -35,7 +45,7 @@ exports.updateUserById = (req, res) => ApiHelper.updateModelById(req, res, User)
 
 exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
 
-exports.findUser=(req,res) => {
-    let conditions={username: req.query.username};
-    ApiHelper.findOneModel(req, res, User,conditions);
+exports.findUser = (req, res) => {
+    let conditions = { username: req.query.username };
+    ApiHelper.findOneModel(req, res, User, conditions);
 };
