@@ -57,42 +57,6 @@ userSchema.pre('save', function (next) {
     } else return next();
 });
 
-/*userSchema.statics.upsertFbUser = function(accessToken, refreshToken, profile, cb) {
-    var that = this;
-    return this.findOne({
-        'facebookProvider.id': profile.id
-    }, function(err, user) {
-        if (!user) {
-            var newUser = new that({
-                username: profile.displayName,
-                email: profile.emails[0].value,
-                facebookProvider: {
-                    id: profile.id,
-                    token: accessToken
-                }
-            });
-
-            newUser.save(function(error, savedUser) {
-                if (error) {
-                    console.log(error);
-                }
-                return cb(error, savedUser);
-            });
-        } else {
-            return cb(err, user);
-        }
-    });
-};
-
-userSchema.methods.comparePassword = function(pw, cb) {
-    bcrypt.compare(pw, this.password, function(err, isMatch) {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, isMatch);
-    });
-};*/
-
 let model = mongoose.model('users', userSchema);
 model.modelName = "user";
 module.exports = model;
