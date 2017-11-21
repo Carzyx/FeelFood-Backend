@@ -24,7 +24,7 @@ exports.loginUser = (req, res) => {
             return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
 
         if (!resp)
-            return res.status(200).send({ message: 'User not found', user: resp });
+            return res.status(200).send({ message: 'E-mail or password is not correct', user: resp });
 
         //1º validate password hash are equals or 2º validate password decoded with password encoded.
         if (req.body.password === resp.password || bcrypt.compareSync(req.body.password, resp.password)) {
@@ -33,9 +33,9 @@ exports.loginUser = (req, res) => {
                 expiresIn: 10800 //Seconds
             });
             delete resp._doc.password;
-            return res.status(200).send({ message: 'Authenticated', token: token, user: resp });
+            return res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
         }
-        return res.status(200).send({ message: 'No Authenticated', token: null, user: resp });
+        return res.status(200).send({ message: 'E-mail or password is not correct', token: null, user: resp });
     }).select('+password');
 };
 
