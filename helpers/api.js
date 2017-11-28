@@ -27,6 +27,21 @@ exports.addModel = function (req, res, T, condition) {
     });
 };
 
+exports.deleteModelByName = function (req, res, T) {
+    console.log(req.query.username);
+    T.find({username: req.query.username}).remove()
+        .then((resp) => {
+            if (resp) {
+                let modelName = T.modelName;
+                res.status(200).send({ message: `${T.modelName} successfully removed.`, model: resp });
+            }
+            else {
+                res.status(400).send({ message: `Can't find ${T.modelName} to remove with id: ${req.query.id} .` });
+            }
+        })
+        .catch(err => res.status(500).send({ message: `There was an error removing ${T.modelName}, please try again later.`, error: err.message }));
+};
+
 exports.deleteModelById = function (req, res, T) {
     console.log(req.body._id);
 

@@ -35,9 +35,11 @@ exports.loginUser = (req, res) => {
             delete resp._doc.password;
             return res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
         }
-        return res.status(200).send({ message: 'E-mail or password is not correct', token: null, user: resp });
+        return res.status(200).send({ message: 'E-mail or password is not correct', token: null });
     }).select('+password');
 };
+
+exports.deleteUserByName = (req, res) => ApiHelper.deleteModelByName(req, res, User);
 
 exports.deleteUserById = (req, res) => ApiHelper.deleteModelById(req, res, User);
 
