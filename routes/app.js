@@ -45,8 +45,6 @@ let restaurantCtrl = require('../controllers/restaurantController');
 let ingredientCtrl = require ('../controllers/IngredientController');
 
 // API routes
-router.route('/register')
-    .post(userCtrl.addUser);
 
 router.route('/')
     .get(function (req,res) {
@@ -71,13 +69,13 @@ router.route('/signup')
     .post(userCtrl.addUser);
 
 router.route('/user')
-    .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers)
+    .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
-    .get(userCtrl.findAllUsers);
+    .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findAllRestaurant)
@@ -102,3 +100,6 @@ router.route('/ingredient/:name')
     .get(ingredientCtrl.findIngredient);
 
 module.exports = app;
+
+
+
