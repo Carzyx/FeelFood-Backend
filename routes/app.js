@@ -51,7 +51,6 @@ router.route('/')
         res.status(200).send('FeelFood Api Server running!');
     });
 
-
 router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope : ['email'] }));
 
