@@ -6,6 +6,7 @@ mongoose.Promise = global.Promise;
 
 let dishSchema = new mongoose.Schema({
     name: { type: String },
+    category:{ type: String},
     description: { type: String },
     amount: { type: Number },
     ingredients: [{

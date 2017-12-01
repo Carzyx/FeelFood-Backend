@@ -8,6 +8,7 @@ let restaurantSchema = new mongoose.Schema({
     password: { type: String ,required:true},
     email: { type: String ,required:true},
     name: { type: String ,required:true},
+    images:[],
     phone: { type: Number },
     location: {
         locationName: { type: String },
@@ -28,7 +29,7 @@ let restaurantSchema = new mongoose.Schema({
         drinksOptions: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
         othersOptions: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
     }],
-    dishes:[ {name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
+    dishes:[ {name: { type: String }, category:{ type: String}, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
 });
 
 let model =  mongoose.model('restaurants', restaurantSchema);

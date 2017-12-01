@@ -50,3 +50,55 @@
          "name" : "zanahoria",
          "calories" : 37
      });
+     db.ingredients.insert({
+         "name" : "chocolate",
+         "calories" : 546
+     });
+     db.ingredients.insert({
+         "name" : "aceite de oliva",
+         "calories" : 884
+     });
+     db.ingredients.insert({
+         "name" : "aceitunas",
+         "calories" : 145
+     });
+     db.ingredients.insert({
+         "name" : "arróz",
+         "calories" : 130
+     });
+     db.ingredients.insert({
+         "name" : "arróz integral",
+         "calories" : 111
+     });
+     db.ingredients.insert({
+         "name" : "arróz integral",
+         "calories" : 266
+     });
+     db.ingredients.insert({
+         "name" : "melón",
+         "calories" : 34
+     });
+     db.ingredients.insert({
+         "name" : "aguacate",
+         "calories" : 160
+     });
+     db.ingredients.insert({
+         "name" : "limón",
+         "calories" : 29
+     });
+     db.ingredients.insert({
+         "name" : "leche (entera)",
+         "calories" : 42
+     });
+     db.ingredients.insert({
+         "name" : "leche (desnatada)",
+         "calories" : 34
+     });
+     db.ingredients.insert({
+         "name" : "leche (sin lactosa)",
+         "calories" : 37.5
+     });
+     db.ingredients.insert({
+         "name" : "mantequilla",
+         "calories" : 717
+     });

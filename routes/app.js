@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(passport.initialize());
-//app.use(passport.session());
+app.use(passport.session());
 
 let router = express.Router();
 app.use(router);
@@ -100,3 +100,6 @@ router.route('/ingredient/:name')
     .get(ingredientCtrl.findIngredient);
 
 module.exports = app;
+
+
+
