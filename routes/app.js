@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(passport.initialize());
-//app.use(passport.session());
+app.use(passport.session());
 
 let router = express.Router();
 app.use(router);
@@ -51,7 +51,6 @@ router.route('/')
         res.status(200).send('FeelFood Api Server running!');
     });
 
-
 router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope : ['email'] }));
 
@@ -77,7 +76,7 @@ router.route('/restaurant/signup')
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
-    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
+    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserByName)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
@@ -106,3 +105,6 @@ router.route('/ingredient/:name')
     .get(ingredientCtrl.findIngredient);
 
 module.exports = app;
+
+
+
