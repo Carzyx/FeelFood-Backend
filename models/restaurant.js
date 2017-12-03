@@ -1,5 +1,6 @@
 'use strict';
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
