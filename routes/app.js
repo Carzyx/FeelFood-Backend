@@ -62,10 +62,16 @@ router.route('/auth/facebook/callback')
         res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
     });
 
-router.route('/login')
+router.route('/user/login')
     .post(userCtrl.loginUser);
-router.route('/signup')
+router.route('/user/signup')
     .post(userCtrl.addUser);
+
+router.route('/restaurant/login')
+    .post(restaurantCtrl.loginRestaurant);
+router.route('/restaurant/signup')
+    .post(restaurantCtrl.addRestaurant);
+
 
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
