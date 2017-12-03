@@ -70,7 +70,7 @@ router.route('/signup')
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
-    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserByName)
+    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
