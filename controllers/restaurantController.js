@@ -19,7 +19,7 @@ exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Rest
 
 exports.findRestaurant=(req,res)=>
 {
-    let conditions={name: req.params.name};
+    let conditions={_id: req.query.id};
     ApiHelper.findOneModel(req,res,Restaurant,conditions);
 }
 

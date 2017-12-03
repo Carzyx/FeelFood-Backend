@@ -78,25 +78,26 @@ router.route('/user/all')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
 
 router.route('/restaurant')
-    .get(restaurantCtrl.findAllRestaurant)
+    .get(restaurantCtrl.findRestaurant)
     .post(restaurantCtrl.addRestaurant)
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
+
 router.route('/restaurant/dish')
     .get(restaurantCtrl.findAllRestaurant)
     .post(restaurantCtrl.addRestaurant)
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
 
-router.route('/restaurant/:name')
-    .get(restaurantCtrl.findRestaurant);
+router.route('/restaurants')
+    .get(restaurantCtrl.findAllRestaurant);
 
 router.route('/ingredient')
     .get(ingredientCtrl.findAllIngredients)
     .post(ingredientCtrl.addIngredient)
     .delete(ingredientCtrl.deleteIngredientById)
     .put(ingredientCtrl.updateIngredientById);
-router.route('/ingredient/:name')
+router.route('/ingredient/')
     .get(ingredientCtrl.findIngredient);
 
 module.exports = app;

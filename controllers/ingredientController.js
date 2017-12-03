@@ -15,7 +15,7 @@ exports.findAllIngredients = (req, res) => ApiHelper.findAllModels(req, res, Ing
 
 exports.findIngredient=(req,res)=>
 {
-    let conditions={name: req.params.name};
+    let conditions={name: req.query.name};
     ApiHelper.findOneModel(req,res,Ingredient,conditions);
 }
 

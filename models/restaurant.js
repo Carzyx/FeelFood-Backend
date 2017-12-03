@@ -20,6 +20,7 @@ let restaurantSchema = new mongoose.Schema({
     menus: [{
         name: { type: String },
         description: { type: String },
+        visible:{ type: Boolean },
         comments: { type: String },
         price: { type: Number },
         starters: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
