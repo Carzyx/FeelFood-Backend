@@ -51,7 +51,6 @@ router.route('/')
         res.status(200).send('FeelFood Api Server running!');
     });
 
-
 router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope : ['email'] }));
 
@@ -71,7 +70,7 @@ router.route('/signup')
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
-    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
+    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserByName)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
