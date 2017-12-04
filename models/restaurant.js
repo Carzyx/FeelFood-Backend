@@ -1,13 +1,26 @@
 'use strict';
 const mongoose = require('mongoose'),
+    bcrypt = require('bcrypt-nodejs'),
     Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
 let restaurantSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    email: { type: String, required: true },
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        select: false
+    },
+    email: {
+        type: String,
+        lowercase: true,
+        required: true,
+        unique: true
+    },
     name: { type: String },
     phone: { type: Number },
     location: {
@@ -33,6 +46,20 @@ let restaurantSchema = new mongoose.Schema({
     dishes: [{ name: { type: String }, description: { type: String }, amount: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
 });
 
+restaurantSchema.pre('save', function (next) {
+    let restaurant = this;
+    if (this.isModified('password') || this.isNew) {
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) return next(err);
+            bcrypt.hash(restaurant.password, salt, null, function (err, hash) {
+                if (err) return next(err);
+                restaurant.password = hash;
+                next();
+            });
+        });
+    } else return next();
+});
+
 let model = mongoose.model('restaurants', restaurantSchema);
-model.modelName = 'restaurant';
+model.modelName = "restaurant";
 module.exports = model;

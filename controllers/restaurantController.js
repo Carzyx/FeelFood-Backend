@@ -6,8 +6,6 @@ const Restaurant = require('../models/restaurant'),
     config = require('../config/config'),
     jwt = require('jsonwebtoken');
 
-
-
 exports.loginRestaurant = (req, res) => {
 
     let conditions = { email: req.body.email };
@@ -28,7 +26,7 @@ exports.loginRestaurant = (req, res) => {
             delete resp._doc.password;
             return res.status(200).send({ success: true, message: 'Authenticated!', token: token, restaurant: resp });
         }
-        return res.status(200).send({ message: 'E-mail or password is not correct', token: null, restaurant: resp });
+        return res.status(200).send({ message: 'E-mail or password is not correct', token: null });
     }).select('+password');
 };
 
@@ -37,31 +35,29 @@ exports.addRestaurant = (req, res) => {
         res.status(400).send({ message: 'Please enter all fields.' });
     } else {
         let conditions = { $or: [{ email: req.body.email }, { username: req.body.username }] };
-        //let conditions = { name: req.body.name, };
-        console.log(conditions);
         ApiHelper.addModel(req, res, Restaurant, conditions);
     }
 };
+exports.deleteRestaurantByName = (req, res) => ApiHelper.deleteModelByName(req, res, Restaurant);
 
 exports.deleteRestaurantById = (req, res) => ApiHelper.deleteModelById(req, res, Restaurant);
 
-exports.updateRestaurantById = (req, res) => ApiHelper.updateModelById(req, res, Restaurant);
+exports.updateRestaurantById = (req, res) => {
+    if (req.body.password){
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) return err;
+            bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+                if (err) return err;
+                req.body.password = hash;
+            });
+        });
+    }
+    ApiHelper.updateModelById(req, res, Restaurant);
+};
 
 exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Restaurant);
 
 exports.findRestaurant = (req, res) => {
-    let conditions = { name: req.params.name };
+    let conditions = { username: req.query.username };
     ApiHelper.findOneModel(req, res, Restaurant, conditions);
-}
-
-exports.findRestaurants = (req, res) => {
-    let conditions = { name: req.body.name };
-    ApiHelper.findModels(req, res, Restaurant, conditions);
-}
-
-//DISHES
-
-exports.addDish = (req, res) => {
-    let conditions = { name: req.body.name };
-    ApiHelper.findModels(req, res, Restaurant, conditions);
-}
+};
