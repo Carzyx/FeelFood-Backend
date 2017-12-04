@@ -7,9 +7,11 @@ const Restaurant = require('../models/restaurant'),
     jwt = require('jsonwebtoken');
 
 exports.loginRestaurant = (req, res) => {
+    console.log(req.body)
 
     let conditions = { email: req.body.email };
     Restaurant.findOne(conditions, function (err, resp) {
+        console.log(JSON.stringify(resp))
 
         if (err)
             return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
@@ -31,6 +33,7 @@ exports.loginRestaurant = (req, res) => {
 };
 
 exports.addRestaurant = (req, res) => {
+
     if (!req.body.email || !req.body.password || !req.body.username) {
         res.status(400).send({ message: 'Please enter all fields.' });
     } else {

@@ -3,6 +3,7 @@
 exports.addModel = function (req, res, T, condition) {
     console.log(req.body);
     T.findOne(condition).then(function (resp) {
+        console.log(resp);
         if (!resp) {
             let model = new T(req.body);
 
