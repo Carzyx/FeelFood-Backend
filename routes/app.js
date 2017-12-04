@@ -42,7 +42,9 @@ router.all('/*', function (req, res, next) {
 // Import Controllers
 let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
-let ingredientCtrl = require ('../controllers/IngredientController');
+let ingredientCtrl = require ('../controllers/ingredientController');
+let allergyCtrl = require ('../controllers/allergyController');
+
 
 // API routes
 
@@ -99,7 +101,9 @@ router.route('/ingredient')
 router.route('/ingredient/')
     .get(ingredientCtrl.findIngredient);
 
+router.route('/allergies')
+    .get(allergyCtrl.findAllAllergies)
+    .post(allergyCtrl.addAllergy)
+    .delete(allergyCtrl.deleteAllergyById);
+
 module.exports = app;
-
-
-
