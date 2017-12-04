@@ -58,6 +58,6 @@ exports.updateRestaurantById = (req, res) => {
 exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Restaurant);
 
 exports.findRestaurant = (req, res) => {
-    let conditions = { username: req.query.username };
+    let conditions = { _id: req.query.id };
     ApiHelper.findOneModel(req, res, Restaurant, conditions);
 };
