@@ -6,15 +6,6 @@ const User = require('../models/user'),
     config = require('../config/config'),
     jwt = require('jsonwebtoken');
 
-exports.addUser = (req, res) => {
-    if (!req.body.email || !req.body.password || !req.body.username) {
-        res.status(400).send({ message: 'Please enter all fields.' });
-    } else {
-        let conditions = { $or: [{ email: req.body.email }, { username: req.body.username }] };
-        ApiHelper.addModel(req, res, User, conditions);
-    }
-};
-
 exports.loginUser = (req, res) => {
 
     let conditions = { email: req.body.email };
@@ -39,6 +30,14 @@ exports.loginUser = (req, res) => {
     }).select('+password');
 };
 
+exports.addUser = (req, res) => {
+    if (!req.body.email || !req.body.password || !req.body.username) {
+        res.status(400).send({ message: 'Please enter all fields.' });
+    } else {
+        let conditions = { $or: [{ email: req.body.email }, { username: req.body.username }] };
+        ApiHelper.addModel(req, res, User, conditions);
+    }
+};
 exports.deleteUserByName = (req, res) => ApiHelper.deleteModelByName(req, res, User);
 
 exports.deleteUserById = (req, res) => ApiHelper.deleteModelById(req, res, User);

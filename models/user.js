@@ -1,15 +1,15 @@
 'use strict';
 const mongoose = require('mongoose'),
-bcrypt = require('bcrypt-nodejs'),
-Schema = mongoose.Schema;
+    bcrypt = require('bcrypt-nodejs'),
+    Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
 let userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required:true,
-        unique:true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -19,7 +19,7 @@ let userSchema = new mongoose.Schema({
         type: String,
         lowercase: true,
         required: true,
-        unique:true
+        unique: true
     },
     firstName: String,
     lastName: String,
@@ -42,7 +42,7 @@ let userSchema = new mongoose.Schema({
         default: 'Client'
     },
     avatar: String,
-    signupDate: {type: Date, default: Date.now()},
+    signupDate: { type: Date, default: Date.now() },
     lastLogin: Date
 });
 
@@ -51,7 +51,7 @@ userSchema.pre('save', function (next) {
     if (this.isModified('password') || this.isNew) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) return next(err);
-            bcrypt.hash(user.password, salt, null, function(err, hash) {
+            bcrypt.hash(user.password, salt, null, function (err, hash) {
                 if (err) return next(err);
                 user.password = hash;
                 next();
