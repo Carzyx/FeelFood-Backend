@@ -26,7 +26,8 @@ router.use(morgan('dev'));
 
 //Implements CORS
 router.all('/*', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header("Access-Control-Allow-Origin", '*');
+    // res.header("Access-Control-Allow-Origin", "http://localhost:8100");
     res.header('Access-Control-Allow-Methods', "GET,PUT,POST,DELETE,OPTIONS");
 
     res.header('Access-Control-Allow-Headers', "Content-Type, Authorization, Content-Length, X-Requested-With,X-Custom-Header,Origin");
@@ -42,7 +43,9 @@ router.all('/*', function (req, res, next) {
 // Import Controllers
 let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
-let ingredientCtrl = require ('../controllers/IngredientController');
+let ingredientCtrl = require ('../controllers/ingredientController');
+let allergyCtrl = require ('../controllers/allergyController');
+
 
 // API routes
 
@@ -76,35 +79,38 @@ router.route('/restaurant/signup')
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
-    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserByName)
+    .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
 
 router.route('/restaurant')
-    .get(restaurantCtrl.findAllRestaurant)
+    .get(restaurantCtrl.findRestaurant)
     .post(restaurantCtrl.addRestaurant)
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
+
 router.route('/restaurant/dish')
     .get(restaurantCtrl.findAllRestaurant)
     .post(restaurantCtrl.addRestaurant)
     .delete(restaurantCtrl.deleteRestaurantById)
     .put(restaurantCtrl.updateRestaurantById);
 
-router.route('/restaurant/:name')
-    .get(restaurantCtrl.findRestaurant);
+router.route('/restaurants')
+    .get(restaurantCtrl.findAllRestaurant);
 
 router.route('/ingredient')
     .get(ingredientCtrl.findAllIngredients)
     .post(ingredientCtrl.addIngredient)
     .delete(ingredientCtrl.deleteIngredientById)
     .put(ingredientCtrl.updateIngredientById);
-router.route('/ingredient/:name')
+router.route('/ingredient/')
     .get(ingredientCtrl.findIngredient);
 
+router.route('/allergies')
+    .get(allergyCtrl.findAllAllergies)
+    .post(allergyCtrl.addAllergy)
+    .delete(allergyCtrl.deleteAllergyById);
+
 module.exports = app;
-
-
-

@@ -42,7 +42,18 @@ exports.deleteUserByName = (req, res) => ApiHelper.deleteModelByName(req, res, U
 
 exports.deleteUserById = (req, res) => ApiHelper.deleteModelById(req, res, User);
 
-exports.updateUserById = (req, res) => ApiHelper.updateModelById(req, res, User);
+exports.updateUserById = (req, res) => {
+    if (req.body.password){
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) return err;
+            bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+                if (err) return err;
+                req.body.password = hash;
+            });
+        });
+    }
+    ApiHelper.updateModelById(req, res, User);
+};
 
 exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
 

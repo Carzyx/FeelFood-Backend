@@ -30,7 +30,10 @@ let userSchema = new mongoose.Schema({
         country: { type: String },
         city: { type: String }
     }],
-    allergies: [{ type: Schema.Types.ObjectId, ref: 'allergies' }],
+    allergies: [{
+       name: String
+    }],
+    //allergies: [{ type: Schema.Types.ObjectId, ref: 'allergies' }],
     favoriteRestaurants: [{ type: Schema.Types.ObjectId, ref: 'restaurants' }],
     orders: [{ type: Schema.Types.ObjectId, ref: 'orders' }],
     role: {

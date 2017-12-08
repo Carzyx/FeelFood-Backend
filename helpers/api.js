@@ -3,6 +3,7 @@
 exports.addModel = function (req, res, T, condition) {
     console.log(req.body);
     T.findOne(condition).then(function (resp) {
+        console.log(resp);
         if (!resp) {
             let model = new T(req.body);
 
@@ -43,9 +44,8 @@ exports.deleteModelByName = function (req, res, T) {
 };
 
 exports.deleteModelById = function (req, res, T) {
-    console.log(req.body._id);
-
-    T.findByIdAndRemove(req.body._id)
+    console.log(req.query.id);
+    T.findByIdAndRemove(req.query.id)
         .then((resp) => {
             if (resp) {
                 let modelName = T.modelName;
