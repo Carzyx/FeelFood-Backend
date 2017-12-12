@@ -7,17 +7,15 @@ const Restaurant = require('../models/restaurant'),
     jwt = require('jsonwebtoken');
 
 exports.loginRestaurant = (req, res) => {
-    console.log(req.body)
-
+    console.log(req.body);
     let conditions = { email: req.body.email };
     Restaurant.findOne(conditions, function (err, resp) {
-        console.log(JSON.stringify(resp))
 
         if (err)
             return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
 
         if (!resp)
-            return res.status(200).send({ message: 'E-mail or password is not correct', restaurant: resp });
+            return res.status(200).send({ message: 'E-mail or password is not correct' });
 
         //1º validate password hash are equals or 2º validate password decoded with password encoded.
         if (req.body.password === resp.password || bcrypt.compareSync(req.body.password, resp.password)) {

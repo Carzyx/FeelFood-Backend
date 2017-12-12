@@ -4,10 +4,11 @@ const User = require('../models/user'),
     ApiHelper = require('../helpers/api'),
     bcrypt = require('bcrypt-nodejs'),
     config = require('../config/config'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    restaurantCtrl = require('../controllers/restaurantController');
 
 exports.loginUser = (req, res) => {
-
+    console.log(req.body);
     let conditions = { email: req.body.email };
     User.findOne(conditions, function (err, resp) {
 
@@ -15,7 +16,7 @@ exports.loginUser = (req, res) => {
             return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
 
         if (!resp)
-            return res.status(200).send({ message: 'E-mail or password is not correct', user: resp });
+            return restaurantCtrl.loginRestaurant(req,res);
 
         //1º validate password hash are equals or 2º validate password decoded with password encoded.
         if (req.body.password === resp.password || bcrypt.compareSync(req.body.password, resp.password)) {

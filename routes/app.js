@@ -27,9 +27,7 @@ router.use(morgan('dev'));
 //Implements CORS
 router.all('/*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", '*');
-    // res.header("Access-Control-Allow-Origin", "http://localhost:8100");
     res.header('Access-Control-Allow-Methods', "GET,PUT,POST,DELETE,OPTIONS");
-
     res.header('Access-Control-Allow-Headers', "Content-Type, Authorization, Content-Length, X-Requested-With,X-Custom-Header,Origin");
     res.header('Access-Control-Allow-Credentials', "true");
     if ('OPTIONS' === req.method) {
@@ -65,13 +63,11 @@ router.route('/auth/facebook/callback')
         res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
     });
 
-router.route('/user/login')
+router.route('/login')
     .post(userCtrl.loginUser);
+
 router.route('/user/signup')
     .post(userCtrl.addUser);
-
-router.route('/restaurant/login')
-    .post(restaurantCtrl.loginRestaurant);
 router.route('/restaurant/signup')
     .post(restaurantCtrl.addRestaurant);
 
