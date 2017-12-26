@@ -8,7 +8,7 @@ let dishSchema = new mongoose.Schema({
     name: { type: String ,index:{unque:true}},
     category:{ type: String},
     description: { type: String },
-    amount: { type: Number },
+    price: { type: Number },
     ingredients: [{
         ingredient: { type: String },
         calories: { type: Number },
