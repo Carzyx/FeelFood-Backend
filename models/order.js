@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 let orderSchema = new mongoose.Schema({
     username: { type: Schema.Types.ObjectId, ref: 'users' },
     restaurant: { type: Schema.Types.ObjectId, ref: 'restaurants' },
-    createDate: { type: Date },
+    createDate: { type: Date, default: Date.now()},
     deliveryDate: { type: Date },
     status: [{ state: { type: String }, dataState: { type: Date } }],
     location: {

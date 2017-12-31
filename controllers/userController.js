@@ -25,9 +25,12 @@ exports.loginUser = (req, res) => {
                 expiresIn: 10800 //Seconds
             });
             delete resp._doc.password;
+            resp.set({lastLogin: resp.nextLastLogin});
+            resp.set({nextLastLogin: Date.now()});
+            resp.save();
             return res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
         }
-        return res.status(200).send({ message: 'E-mail or password is not correct', token: null });
+        return res.status(200).send({ message: 'E-mail or password is not correct'});
     }).select('+password');
 };
 
@@ -61,4 +64,32 @@ exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
 exports.findUser = (req, res) => {
     let conditions = { username: req.query.username };
     ApiHelper.findOneModel(req, res, User, conditions);
+};
+
+exports.setToken = (req,res) => {
+    let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
+        expiresIn: 10800 //Seconds
+    });
+    User.findOne({id: req.user._doc.id}, function (err, user) {
+        if (err) throw(err);
+        if (!err && user != null) {
+            user.set({token: token});
+            user.save();
+            return res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + req.user._doc.tokenFb);
+        }
+    });
+};
+
+exports.loginUserFacebook = (req,res) => {
+    User.findOne({username: req.body.username}, function (err, user) {
+        if (err) throw(err);
+        if (!err && user != null) {
+            if (user.tokenFb && (user.tokenFb === req.body.tokenFb)){
+                user.tokenFb = undefined;
+                user.save();
+                return res.status(200).send({ success: true, message: 'Authenticated!', token: user.token, user: user });
+            }
+        }
+        return res.status(200).send({ message: 'Failed to login Facebook.'});
+    });
 };

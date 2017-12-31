@@ -43,7 +43,10 @@ let userSchema = new mongoose.Schema({
     },
     avatar: String,
     signupDate: { type: Date, default: Date.now() },
-    lastLogin: Date
+    lastLogin: Date,
+    nextLastLogin: Date,
+    token: String,
+    tokenFb: String
 });
 
 userSchema.pre('save', function (next) {
