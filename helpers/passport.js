@@ -32,22 +32,24 @@ module.exports = function (passport) {
                 user.set({lastLogin: user.nextLastLogin});
                 user.set({nextLastLogin: Date.now()});
                 user.set({tokenFb: accessToken});
-                user.save();
-                return done(null, user);
+                user.save()
+                    .then(resp => {return done(null, user)})
+                    .catch(err => console.log(err));
+            } else {
+                let newUser = new User({
+                    email: profile.emails[0].value,
+                    username: profile.name.givenName,
+                    firstName: profile.name.familyName,
+                    lastName: profile.name.middleName,
+                    avatar: profile.photos[0].value,
+                    tokenFb: accessToken
+                });
+                console.log(newUser);
+                newUser.save(function (err) {
+                    if (err) throw err;
+                    done(null, user);
+                });
             }
-            let newUser = new User({
-                email   	: profile.emails[0].value,
-                username  : profile.name.givenName,
-                firstName	: profile.name.familyName,
-                lastName  : profile.name.middleName,
-                avatar		: profile.photos[0].value,
-                tokenFb   : accessToken
-            });
-            console.log(newUser);
-            newUser.save(function(err) {
-                if(err) throw err;
-                done(null, user);
-            });
         });
     }));
 

@@ -6,7 +6,6 @@ let express = require('express'),
     methodOverride = require('method-override'),
     passport = require('passport'),
     morgan = require('morgan'),
-    config = require('../config/config'),
     jwt = require('jsonwebtoken');
 
 require('../helpers/passport')(passport);
@@ -62,7 +61,7 @@ router.route('/auth/facebook/user')
     .post(userCtrl.loginUserFacebook);
 
 router.route('/login')
-    .post(userCtrl.loginUser);
+    .post(userCtrl.loginUser, restaurantCtrl.loginRestaurant);
 
 router.route('/user/signup')
     .post(userCtrl.addUser);
@@ -79,10 +78,13 @@ router.route('/user/all')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
 
 router.route('/restaurant')
-    .get(restaurantCtrl.findRestaurant)
-    .post(restaurantCtrl.addRestaurant)
-    .delete(passport.authenticate('jwt', { session: false }),restaurantCtrl.deleteRestaurantById)
-    .put(passport.authenticate('jwt', { session: false }),restaurantCtrl.updateRestaurantById);
+    .get(passport.authenticate('jwt', { session: false }), restaurantCtrl.findRestaurant)
+    .post(passport.authenticate('jwt', { session: false }), restaurantCtrl.addRestaurant)
+    .delete(passport.authenticate('jwt', { session: false }), restaurantCtrl.deleteRestaurantById)
+    .put(passport.authenticate('jwt', { session: false }), restaurantCtrl.updateRestaurantById);
+
+router.route('/restaurant/public')
+    .get(restaurantCtrl.findRestaurantPublic);
 
 router.route('/search')
     .get(restaurantCtrl.findRestaurantByName)
