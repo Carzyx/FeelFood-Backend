@@ -31,6 +31,18 @@ let restaurantSchema = new mongoose.Schema({
         country: { type: String },
         city: { type: String }
     },
+    tags:{
+        homeDelivery:{  type: Boolean   },
+        takeAway:{  type: Boolean   },
+        average:{
+            dish:{  type: Number  },
+            menu:{  type: Number    }
+        },
+        description:[{
+            name:{  type: String    },
+            value:{ type: Number    }
+        }],
+    },
     menus: [{
         name: { type: String },
         description: { type: String },

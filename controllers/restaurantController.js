@@ -62,3 +62,20 @@ exports.findRestaurant = (req, res) => {
     let conditions = { _id: req.query.id };
     ApiHelper.findOneModel(req, res, Restaurant, conditions);
 };
+exports.findRestaurantByName = (req, res) => {
+    // conditions = {$text:{ $search:req.body.name }};
+    let conditions
+    if(req.query.name)
+        conditions = { name: eval(`/${req.query.name}/`) };
+    ApiHelper.findModels(req, res, Restaurant, conditions);
+};
+exports.findRestaurantByConditions =(req, res) => {
+    let conditions;
+    console.log(req.body);
+    if(req.body.homeDelivery)
+        conditions={"tags.homeDelivery":req.body.homeDelivery};
+    if(req.body.takeAway)
+        conditions={"tags.takeAway":req.body.takeAway};
+    console.log(conditions);
+    ApiHelper.findModels(req, res, Restaurant, conditions);
+};

@@ -72,7 +72,6 @@ router.route('/restaurant/signup')
 
 router.route('/user')
     .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
-    .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
@@ -82,14 +81,12 @@ router.route('/user/all')
 router.route('/restaurant')
     .get(restaurantCtrl.findRestaurant)
     .post(restaurantCtrl.addRestaurant)
-    .delete(restaurantCtrl.deleteRestaurantById)
-    .put(restaurantCtrl.updateRestaurantById);
+    .delete(passport.authenticate('jwt', { session: false }),restaurantCtrl.deleteRestaurantById)
+    .put(passport.authenticate('jwt', { session: false }),restaurantCtrl.updateRestaurantById);
 
-router.route('/restaurant/dish')
-    .get(restaurantCtrl.findAllRestaurant)
-    .post(restaurantCtrl.addRestaurant)
-    .delete(restaurantCtrl.deleteRestaurantById)
-    .put(restaurantCtrl.updateRestaurantById);
+router.route('/search')
+    .get(restaurantCtrl.findRestaurantByName)
+    .post(restaurantCtrl.findRestaurantByConditions);
 
 router.route('/restaurants')
     .get(restaurantCtrl.findAllRestaurant);
