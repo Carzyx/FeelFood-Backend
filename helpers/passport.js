@@ -14,26 +14,26 @@ module.exports = function (passport) {
         done(null, user.id);
     });
 
-    passport.deserializeUser(function(id, done) {
+    passport.deserializeUser(function (id, done) {
         User.findOne({ _id: id }, function (err, user) {
             done(err, user);
         });
     });
 
     passport.use(new FacebookStrategy({
-        clientID		: config.facebook.id,
-        clientSecret	: config.facebook.secret,
-        callbackURL	    : '/auth/facebook/callback',
-        profileFields   : ['id', 'name', 'displayName', 'emails', 'picture.type(large)']
-    }, function(accessToken, refreshToken, profile, done) {
-        User.findOne({email: profile.emails[0].value}, function(err, user) {
-            if(err) throw(err);
-            if(!err && user!= null) {
-                user.set({lastLogin: user.nextLastLogin});
-                user.set({nextLastLogin: Date.now()});
-                user.set({tokenFb: accessToken});
+        clientID: config.facebook.id,
+        clientSecret: config.facebook.secret,
+        callbackURL: '/auth/facebook/callback',
+        profileFields: ['id', 'name', 'displayName', 'emails', 'picture.type(large)']
+    }, function (accessToken, refreshToken, profile, done) {
+        User.findOne({ email: profile.emails[0].value }, function (err, user) {
+            if (err) throw (err);
+            if (!err && user != null) {
+                user.set({ lastLogin: user.nextLastLogin });
+                user.set({ nextLastLogin: Date.now() });
+                user.set({ tokenFb: accessToken });
                 user.save()
-                    .then(resp => {return done(null, user)})
+                    .then(resp => { return done(null, user) })
                     .catch(err => console.log(err));
             } else {
                 let newUser = new User({
@@ -53,8 +53,8 @@ module.exports = function (passport) {
         });
     }));
 
-    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-        User.findOne({id: jwt_payload.id}, function(err, user) {
+    passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
+        User.findOne({ id: jwt_payload.id }, function (err, user) {
             if (err) {
                 return done(err, false);
             }

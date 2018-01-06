@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
 let dishSchema = new mongoose.Schema({
-    name: { type: String ,index:{unque:true}},
-    category:{ type: String},
+    name: { type: String, index: { unque: true } },
+    category: { type: String },
     description: { type: String },
     price: { type: Number },
     ingredients: [{

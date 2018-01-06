@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 
 let ingredientSchema = new mongoose.Schema({
     name: { type: String },
-    calories: {type:Number}    
+    calories: { type: Number }
 });
 
 let model = mongoose.model('ingredients', ingredientSchema);

@@ -33,22 +33,22 @@ let restaurantSchema = new mongoose.Schema({
         }],
         validate: [arrayLimit, '{PATH} exceeds the limit of 1']
     },
-    tags:{
-        homeDelivery:{  type: Boolean   },
-        takeAway:{  type: Boolean   },
-        average:{
-            dish:{  type: Number  },
-            menu:{  type: Number    }
+    tags: {
+        homeDelivery: { type: Boolean },
+        takeAway: { type: Boolean },
+        average: {
+            dish: { type: Number },
+            menu: { type: Number }
         },
-        description:[{
-            name:{  type: String    },
-            value:{ type: Number    }
+        description: [{
+            name: { type: String },
+            value: { type: Number }
         }],
     },
     menus: [{
         name: { type: String },
         description: { type: String },
-        visible:{ type: Boolean },
+        visible: { type: Boolean },
         comments: { type: String },
         price: { type: Number },
         starters: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],

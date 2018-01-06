@@ -8,7 +8,7 @@ exports.addModel = function (req, res, T, condition) {
             let model = new T(req.body);
 
             model.save()
-                .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp , success: true }))
+                .then(resp => res.status(200).send({ message: `${T.modelName} successfully created.`, model: resp, success: true }))
                 .catch(err => res.status(500).send({ message: `There was an error creating a  ${T.modelName}, please try again later.`, error: err.message }));
         }
         else {
@@ -23,14 +23,14 @@ exports.addModel = function (req, res, T, condition) {
             }
             else
                 text = con;
-            res.status(200).send({ message: `this ${text} is already in use.`, success: false});
+            res.status(200).send({ message: `this ${text} is already in use.`, success: false });
         }
     });
 };
 
 exports.deleteModelByName = function (req, res, T) {
     console.log(req.query.username);
-    T.find({username: req.query.username}).remove()
+    T.find({ username: req.query.username }).remove()
         .then((resp) => {
             if (resp) {
                 let modelName = T.modelName;
@@ -94,7 +94,7 @@ exports.findOneModel = function (req, res, T, condition, population) {
 };
 exports.findModels = function (req, res, T, condition, population) {
     T.find(condition)
-        .then(resp => { console.log(resp);res.status(200).jsonp(resp)})
+        .then(resp => { console.log(resp); res.status(200).jsonp(resp) })
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 }
 

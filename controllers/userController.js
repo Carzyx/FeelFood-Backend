@@ -23,15 +23,15 @@ exports.loginUser = (req, res, next) => {
             let token = jwt.sign({ username: resp.username, email: resp.email, _id: resp.id }, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            resp.set({lastLogin: resp.nextLastLogin});
-            resp.set({nextLastLogin: Date.now()});
+            resp.set({ lastLogin: resp.nextLastLogin });
+            resp.set({ nextLastLogin: Date.now() });
             resp.save()
                 .then(resp => {
                     delete resp._doc.password;
                     res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
                 })
                 .catch(err => console.log(err));
-        } else return res.status(200).send({ message: 'E-mail or password is not correct'});
+        } else return res.status(200).send({ message: 'E-mail or password is not correct' });
     }).select('+password');
 };
 
@@ -48,10 +48,10 @@ exports.deleteUserByName = (req, res) => ApiHelper.deleteModelByName(req, res, U
 exports.deleteUserById = (req, res) => ApiHelper.deleteModelById(req, res, User);
 
 exports.updateUserById = (req, res) => {
-    if (req.body.password){
+    if (req.body.password) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) return err;
-            bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+            bcrypt.hash(req.body.password, salt, null, function (err, hash) {
                 if (err) return err;
                 req.body.password = hash;
             });
@@ -67,14 +67,14 @@ exports.findUser = (req, res) => {
     ApiHelper.findOneModel(req, res, User, conditions);
 };
 
-exports.setToken = (req,res) => {
-    let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
+exports.setToken = (req, res) => {
+    let token = jwt.sign({ username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id }, config.secret, {
         expiresIn: 10800 //Seconds
     });
-    User.findOne({id: req.user._doc.id}, function (err, user) {
-        if (err) throw(err);
+    User.findOne({ id: req.user._doc.id }, function (err, user) {
+        if (err) throw (err);
         if (!err && user != null) {
-            user.set({token: token});
+            user.set({ token: token });
             user.save()
                 .then(resp => res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + req.user._doc.tokenFb))
                 .catch(err => console.log(err));
@@ -82,11 +82,11 @@ exports.setToken = (req,res) => {
     });
 };
 
-exports.loginUserFacebook = (req,res) => {
-    User.findOne({username: req.body.username}, function (err, user) {
-        if (err) throw(err);
+exports.loginUserFacebook = (req, res) => {
+    User.findOne({ username: req.body.username }, function (err, user) {
+        if (err) throw (err);
         if (!err && user != null) {
-            if (user.tokenFb && (user.tokenFb === req.body.tokenFb)){
+            if (user.tokenFb && (user.tokenFb === req.body.tokenFb)) {
                 user.tokenFb = undefined;
                 user.save()
                     .then(resp => {
@@ -94,7 +94,7 @@ exports.loginUserFacebook = (req,res) => {
                         res.status(200).send({ success: true, message: 'Authenticated!', token: user.token, user: resp });
                     })
                     .catch(err => console.log(err));
-            } else return res.status(200).send({ message: 'Failed to login Facebook.'});
+            } else return res.status(200).send({ message: 'Failed to login Facebook.' });
         }
     });
 };

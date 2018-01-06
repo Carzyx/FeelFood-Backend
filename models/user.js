@@ -31,7 +31,7 @@ let userSchema = new mongoose.Schema({
         city: { type: String }
     }],
     allergies: [{
-       name: String
+        name: String
     }],
     //allergies: [{ type: Schema.Types.ObjectId, ref: 'allergies' }],
     favoriteRestaurants: [{ type: Schema.Types.ObjectId, ref: 'restaurants' }],
