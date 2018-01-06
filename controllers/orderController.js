@@ -5,7 +5,11 @@ const Order = require('../models/order'),
     User = require('../models/user'),
     Restaurant = require('../models/restaurant');
 
-exports.addOrder = (req, res) => ApiHelper.addModel(req, res, Order);
+exports.addOrder = (req, res) => {
+    let conditions = { createDate: req.body.createDate };
+
+    ApiHelper.addModel(req, res, Order, conditions)
+};
 
 exports.deleteOrderById = (req, res) => ApiHelper.deleteModelById(req, res, Order);
 

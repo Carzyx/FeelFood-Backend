@@ -41,23 +41,24 @@ router.all('/*', function (req, res, next) {
 // Import Controllers
 let userCtrl = require('../controllers/userController');
 let restaurantCtrl = require('../controllers/restaurantController');
-let ingredientCtrl = require ('../controllers/ingredientController');
-let allergyCtrl = require ('../controllers/allergyController');
+let ingredientCtrl = require('../controllers/ingredientController');
+let allergyCtrl = require('../controllers/allergyController');
+let ordersCtrl = require('../controllers/orderController');
 
 
 // API routes
 
 router.route('/')
-    .get(function (req,res) {
+    .get(function (req, res) {
         res.status(200).send('FeelFood Api Server running!');
     });
 
 router.route('/auth/facebook')
-    .get(passport.authenticate('facebook', { scope : ['email'] }));
+    .get(passport.authenticate('facebook', { scope: ['email'] }));
 
 router.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', { session: false,  failureRedirect: 'http://localhost:4200/login' }), function (req,res) {
-        let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
+    .get(passport.authenticate('facebook', { session: false, failureRedirect: 'http://localhost:4200/login' }), function (req, res) {
+        let token = jwt.sign({ username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id }, config.secret, {
             expiresIn: 10800 //Seconds
         });
         res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
@@ -73,13 +74,13 @@ router.route('/restaurant/signup')
 
 
 router.route('/user')
-    .get(passport.authenticate('jwt', { session: false }),userCtrl.findUser)
+    .get(passport.authenticate('jwt', { session: false }), userCtrl.findUser)
     .post(passport.authenticate('jwt', { session: false }), userCtrl.addUser)
     .delete(passport.authenticate('jwt', { session: false }), userCtrl.deleteUserById)
     .put(passport.authenticate('jwt', { session: false }), userCtrl.updateUserById);
 
 router.route('/user/all')
-    .get(passport.authenticate('jwt', { session: false }),userCtrl.findAllUsers);
+    .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers);
 
 router.route('/restaurant')
     .get(restaurantCtrl.findRestaurant)
@@ -108,5 +109,9 @@ router.route('/allergies')
     .get(allergyCtrl.findAllAllergies)
     .post(allergyCtrl.addAllergy)
     .delete(allergyCtrl.deleteAllergyById);
+
+router.route('/orders')
+    //.get(ordersCtrl.)
+    .post(ordersCtrl.addOrder);
 
 module.exports = app;
