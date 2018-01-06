@@ -4,10 +4,9 @@ const User = require('../models/user'),
     ApiHelper = require('../helpers/api'),
     bcrypt = require('bcrypt-nodejs'),
     config = require('../config/config'),
-    jwt = require('jsonwebtoken'),
-    restaurantCtrl = require('../controllers/restaurantController');
+    jwt = require('jsonwebtoken');
 
-exports.loginUser = (req, res) => {
+exports.loginUser = (req, res, next) => {
     console.log(req.body);
     let conditions = { email: req.body.email };
     User.findOne(conditions, function (err, resp) {
@@ -16,7 +15,7 @@ exports.loginUser = (req, res) => {
             return res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`);
 
         if (!resp)
-            return restaurantCtrl.loginRestaurant(req,res);
+            return next();
 
         //1º validate password hash are equals or 2º validate password decoded with password encoded.
         if (req.body.password === resp.password || bcrypt.compareSync(req.body.password, resp.password)) {
@@ -24,10 +23,15 @@ exports.loginUser = (req, res) => {
             let token = jwt.sign({ username: resp.username, email: resp.email, _id: resp.id }, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            delete resp._doc.password;
-            return res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
-        }
-        return res.status(200).send({ message: 'E-mail or password is not correct', token: null });
+            resp.set({lastLogin: resp.nextLastLogin});
+            resp.set({nextLastLogin: Date.now()});
+            resp.save()
+                .then(resp => {
+                    delete resp._doc.password;
+                    res.status(200).send({ success: true, message: 'Authenticated!', token: token, user: resp });
+                })
+                .catch(err => console.log(err));
+        } else return res.status(200).send({ message: 'E-mail or password is not correct'});
     }).select('+password');
 };
 
@@ -59,6 +63,38 @@ exports.updateUserById = (req, res) => {
 exports.findAllUsers = (req, res) => ApiHelper.findAllModels(req, res, User);
 
 exports.findUser = (req, res) => {
-    let conditions = { username: req.query.username };
+    let conditions = { _id: req.query.id };
     ApiHelper.findOneModel(req, res, User, conditions);
+};
+
+exports.setToken = (req,res) => {
+    let token = jwt.sign({username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id}, config.secret, {
+        expiresIn: 10800 //Seconds
+    });
+    User.findOne({id: req.user._doc.id}, function (err, user) {
+        if (err) throw(err);
+        if (!err && user != null) {
+            user.set({token: token});
+            user.save()
+                .then(resp => res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + req.user._doc.tokenFb))
+                .catch(err => console.log(err));
+        }
+    });
+};
+
+exports.loginUserFacebook = (req,res) => {
+    User.findOne({username: req.body.username}, function (err, user) {
+        if (err) throw(err);
+        if (!err && user != null) {
+            if (user.tokenFb && (user.tokenFb === req.body.tokenFb)){
+                user.tokenFb = undefined;
+                user.save()
+                    .then(resp => {
+                        delete resp._doc.password;
+                        res.status(200).send({ success: true, message: 'Authenticated!', token: user.token, user: resp });
+                    })
+                    .catch(err => console.log(err));
+            } else return res.status(200).send({ message: 'Failed to login Facebook.'});
+        }
+    });
 };

@@ -11,34 +11,45 @@ module.exports = function (passport) {
     opts.secretOrKey = config.secret;
 
     passport.serializeUser(function (user, done) {
-        done(null, user);
+        done(null, user.id);
     });
 
-    passport.deserializeUser(function (obj, done) {
-        done(null, obj);
+    passport.deserializeUser(function(id, done) {
+        User.findOne({ _id: id }, function (err, user) {
+            done(err, user);
+        });
     });
 
     passport.use(new FacebookStrategy({
         clientID		: config.facebook.id,
         clientSecret	: config.facebook.secret,
         callbackURL	    : '/auth/facebook/callback',
-        profileFields   : ['id', 'name', 'displayName', 'emails', 'photos']
+        profileFields   : ['id', 'name', 'displayName', 'emails', 'picture.type(large)']
     }, function(accessToken, refreshToken, profile, done) {
         User.findOne({email: profile.emails[0].value}, function(err, user) {
             if(err) throw(err);
-            if(!err && user!= null) return done(null, user);
-            let newUser = new User({
-                email   	: profile.emails[0].value,
-                username  : profile.displayName,
-                firstName	: profile.name.givenName,
-                lastName  : profile.name.familyName,
-                avatar		: profile.photos[0].value
-            });
-            console.log(newUser);
-            newUser.save(function(err) {
-                if(err) throw err;
-                done(null, user);
-            });
+            if(!err && user!= null) {
+                user.set({lastLogin: user.nextLastLogin});
+                user.set({nextLastLogin: Date.now()});
+                user.set({tokenFb: accessToken});
+                user.save()
+                    .then(resp => {return done(null, user)})
+                    .catch(err => console.log(err));
+            } else {
+                let newUser = new User({
+                    email: profile.emails[0].value,
+                    username: profile.name.givenName,
+                    firstName: profile.name.familyName,
+                    lastName: profile.name.middleName,
+                    avatar: profile.photos[0].value,
+                    tokenFb: accessToken
+                });
+                console.log(newUser);
+                newUser.save(function (err) {
+                    if (err) throw err;
+                    done(null, user);
+                });
+            }
         });
     }));
 

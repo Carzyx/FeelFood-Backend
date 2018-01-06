@@ -7,7 +7,6 @@ const Restaurant = require('../models/restaurant'),
     jwt = require('jsonwebtoken');
 
 exports.loginRestaurant = (req, res) => {
-    console.log(req.body);
     let conditions = { email: req.body.email };
     Restaurant.findOne(conditions, function (err, resp) {
 
@@ -23,10 +22,15 @@ exports.loginRestaurant = (req, res) => {
             let token = jwt.sign({ username: resp.username, email: resp.email, _id: resp.id }, config.secret, {
                 expiresIn: 10800 //Seconds
             });
-            delete resp._doc.password;
-            return res.status(200).send({ success: true, message: 'Authenticated!', token: token, restaurant: resp });
-        }
-        return res.status(200).send({ message: 'E-mail or password is not correct', token: null });
+            resp.set({lastLogin: resp.nextLastLogin});
+            resp.set({nextLastLogin: Date.now()});
+            resp.save()
+            .then(resp => {
+                delete resp._doc.password;
+                res.status(200).send({ success: true, message: 'Authenticated!', token: token, restaurant: resp });
+            })
+                .catch(err => console.log(err));
+        } else return res.status(200).send({ message: 'E-mail or password is not correct'});
     }).select('+password');
 };
 
@@ -56,9 +60,36 @@ exports.updateRestaurantById = (req, res) => {
     ApiHelper.updateModelById(req, res, Restaurant);
 };
 
-exports.findAllRestaurant = (req, res) => ApiHelper.findAllModels(req, res, Restaurant);
+exports.findAllRestaurant = (req, res) => {
+  Restaurant.find().select('-username -nextLastLogin -lastLogin -signupDate')
+      .then(resp => res.status(200).jsonp(resp))
+      .catch(err => res.status(500).send(`There was an error searching all restaurants, please try again later. Error: ${err.message}`));
+};
+
+exports.findRestaurantPublic = (req, res) => {
+  Restaurant.findOne({ _id: req.query.id }).select('-username -nextLastLogin -lastLogin -signupDate')
+      .then(resp => res.status(200).jsonp(resp))
+      .catch(err => res.status(500).send(`There was an error searching the restaurant, please try again later. Error: ${err.message}`));
+};
 
 exports.findRestaurant = (req, res) => {
     let conditions = { _id: req.query.id };
     ApiHelper.findOneModel(req, res, Restaurant, conditions);
+};
+exports.findRestaurantByName = (req, res) => {
+    // conditions = {$text:{ $search:req.body.name }};
+    let conditions;
+    if(req.query.name)
+        conditions = { name: eval(`/${req.query.name}/`) };
+    ApiHelper.findModels(req, res, Restaurant, conditions);
+};
+exports.findRestaurantByConditions =(req, res) => {
+    let conditions;
+    console.log(req.body);
+    if(req.body.homeDelivery)
+        conditions={"tags.homeDelivery":req.body.homeDelivery};
+    if(req.body.takeAway)
+        conditions={"tags.takeAway":req.body.takeAway};
+    console.log(conditions);
+    ApiHelper.findModels(req, res, Restaurant, conditions);
 };

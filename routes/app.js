@@ -6,7 +6,6 @@ let express = require('express'),
     methodOverride = require('method-override'),
     passport = require('passport'),
     morgan = require('morgan'),
-    config = require('../config/config'),
     jwt = require('jsonwebtoken');
 
 require('../helpers/passport')(passport);
@@ -57,15 +56,13 @@ router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope: ['email'] }));
 
 router.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', { session: false, failureRedirect: 'http://localhost:4200/login' }), function (req, res) {
-        let token = jwt.sign({ username: req.user._doc.username, email: req.user._doc.email, _id: req.user._doc.id }, config.secret, {
-            expiresIn: 10800 //Seconds
-        });
-        res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + token);
-    });
+    .get(passport.authenticate('facebook', { session: false, failureRedirect: 'http://localhost:4200/login' }), userCtrl.setToken);
+
+router.route('/auth/facebook/user')
+    .post(userCtrl.loginUserFacebook);
 
 router.route('/login')
-    .post(userCtrl.loginUser);
+    .post(userCtrl.loginUser, restaurantCtrl.loginRestaurant);
 
 router.route('/user/signup')
     .post(userCtrl.addUser);
@@ -83,16 +80,17 @@ router.route('/user/all')
     .get(passport.authenticate('jwt', { session: false }), userCtrl.findAllUsers);
 
 router.route('/restaurant')
-    .get(restaurantCtrl.findRestaurant)
-    .post(restaurantCtrl.addRestaurant)
-    .delete(restaurantCtrl.deleteRestaurantById)
-    .put(restaurantCtrl.updateRestaurantById);
+    .get(passport.authenticate('jwt', { session: false }), restaurantCtrl.findRestaurant)
+    .post(passport.authenticate('jwt', { session: false }), restaurantCtrl.addRestaurant)
+    .delete(passport.authenticate('jwt', { session: false }), restaurantCtrl.deleteRestaurantById)
+    .put(passport.authenticate('jwt', { session: false }), restaurantCtrl.updateRestaurantById);
 
-router.route('/restaurant/dish')
-    .get(restaurantCtrl.findAllRestaurant)
-    .post(restaurantCtrl.addRestaurant)
-    .delete(restaurantCtrl.deleteRestaurantById)
-    .put(restaurantCtrl.updateRestaurantById);
+router.route('/restaurant/public')
+    .get(restaurantCtrl.findRestaurantPublic);
+
+router.route('/search')
+    .get(restaurantCtrl.findRestaurantByName)
+    .post(restaurantCtrl.findRestaurantByConditions);
 
 router.route('/restaurants')
     .get(restaurantCtrl.findAllRestaurant);

@@ -1,7 +1,6 @@
 'use strict';
 const mongoose = require('mongoose'),
-    bcrypt = require('bcrypt-nodejs'),
-    Schema = mongoose.Schema;
+    bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
 
@@ -23,13 +22,28 @@ let restaurantSchema = new mongoose.Schema({
         unique: true
     },
     name: { type: String },
-    phone: { type: Number },
+    phone: { type: String },
     location: {
-        locationName: { type: String },
-        address: { type: String },
-        postalCode: { type: Number },
-        country: { type: String },
-        city: { type: String }
+        type: [{
+            locationName: { type: String },
+            address: { type: String },
+            postalCode: { type: Number },
+            country: { type: String },
+            city: { type: String }
+        }],
+        validate: [arrayLimit, '{PATH} exceeds the limit of 1']
+    },
+    tags:{
+        homeDelivery:{  type: Boolean   },
+        takeAway:{  type: Boolean   },
+        average:{
+            dish:{  type: Number  },
+            menu:{  type: Number    }
+        },
+        description:[{
+            name:{  type: String    },
+            value:{ type: Number    }
+        }],
     },
     menus: [{
         name: { type: String },
@@ -44,8 +58,16 @@ let restaurantSchema = new mongoose.Schema({
         drinksOptions: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
         othersOptions: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
     }],
-    dishes: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
+    dishes: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
+    avatar: String,
+    signupDate: { type: Date, default: Date.now() },
+    lastLogin: Date,
+    nextLastLogin: Date
 });
+
+function arrayLimit(val) {
+    return val.length <= 1;
+}
 
 restaurantSchema.pre('save', function (next) {
     let restaurant = this;

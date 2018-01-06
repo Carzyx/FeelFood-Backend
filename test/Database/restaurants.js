@@ -10,7 +10,8 @@ db.restaurants.insert({
         "https://portal.restomontreal.ca/gourmet-burger/gallery/images/a_a_gourmet-burger.jpg"
     ],
     "menus": [],
-    "name": "Bulli",
+    "name": "Soteras",
     "phone": 123456789,
     "username": "nballelo"
 });
+db.restaurants.createIndex({name:"text"})
