@@ -48,6 +48,7 @@ exports.deleteRestaurantByName = (req, res) => ApiHelper.deleteModelByName(req, 
 exports.deleteRestaurantById = (req, res) => ApiHelper.deleteModelById(req, res, Restaurant);
 
 exports.updateRestaurantById = (req, res) => {
+    console.log(req.body)
     if (req.body.password) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) return err;
@@ -80,16 +81,26 @@ exports.findRestaurantByName = (req, res) => {
     // conditions = {$text:{ $search:req.body.name }};
     let conditions;
     if (req.query.name)
-        conditions = { name: eval(`/${req.query.name}/`) };
+        conditions = { name: {$regex: req.query.name,$options:'i'}};
+        //conditions = { name: eval(`/${req.query.name}/`) };
     ApiHelper.findModels(req, res, Restaurant, conditions);
 };
+exports.findRestaurantsNamesByName = (req, res) => {
+    Restaurant.find({ name: {$regex: req.query.name,$options:'i'}}).select('name')
+        .then(resp => res.status(200).jsonp(resp))
+        .catch(err => res.status(500).send(`There was an error searching the restaurant, please try again later. Error: ${err.message}`));
+};
 exports.findRestaurantByConditions = (req, res) => {
-    let conditions;
+    var conditions = {};
     console.log(req.body);
     if (req.body.homeDelivery)
-        conditions = { "tags.homeDelivery": req.body.homeDelivery };
+        conditions["tags.homeDelivery"]=req.body.homeDelivery  ;
     if (req.body.takeAway)
-        conditions = { "tags.takeAway": req.body.takeAway };
+        conditions ["tags.takeAway"]=req.body.takeAway ;
+    // if ((req.body.takeAway)&&(req.body.homeDelivery))
+    //     conditions = { "tags.homeDelivery": req.body.homeDelivery  , "tags.takeAway": req.body.takeAway };
+    if ((req.body.priceMin)||(req.body.priceMax))
+        conditions["tags.average.dish"]={ $lt: req.body.priceMax, $gte: req.body.priceMin };
     console.log(conditions);
     ApiHelper.findModels(req, res, Restaurant, conditions);
 };

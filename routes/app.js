@@ -91,17 +91,19 @@ router.route('/restaurant/public')
 router.route('/search')
     .get(restaurantCtrl.findRestaurantByName)
     .post(restaurantCtrl.findRestaurantByConditions);
+router.route('/speedSearch')
+    .get(restaurantCtrl.findRestaurantsNamesByName);
 
 router.route('/restaurants')
     .get(restaurantCtrl.findAllRestaurant);
 
 router.route('/ingredient')
-    .get(ingredientCtrl.findAllIngredients)
+    .get(ingredientCtrl.findIngredient)
     .post(ingredientCtrl.addIngredient)
     .delete(ingredientCtrl.deleteIngredientById)
     .put(ingredientCtrl.updateIngredientById);
-router.route('/ingredient/')
-    .get(ingredientCtrl.findIngredient);
+router.route('/ingredients')
+    .get(ingredientCtrl.findAllIngredients);
 
 router.route('/allergies')
     .get(allergyCtrl.findAllAllergies)

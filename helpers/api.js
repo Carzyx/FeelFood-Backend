@@ -94,7 +94,7 @@ exports.findOneModel = function (req, res, T, condition, population) {
 };
 exports.findModels = function (req, res, T, condition, population) {
     T.find(condition)
-        .then(resp => { console.log(resp); res.status(200).jsonp(resp) })
+        .then(resp => res.status(200).jsonp(resp))
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
 }
 
