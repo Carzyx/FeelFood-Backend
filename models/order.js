@@ -13,7 +13,9 @@ let orderSchema = new mongoose.Schema({
         address: { type: String },
         postalCode: { type: Number },
         country: { type: String },
-        city: { type: String }
+        city: { type: String },
+        lat: { type: Number },
+        lng: { type: Number }
     },
 
     username_id: { type: Schema.Types.ObjectId, ref: 'users' },
@@ -24,13 +26,16 @@ let orderSchema = new mongoose.Schema({
         address: { type: String },
         postalCode: { type: Number },
         country: { type: String },
-        city: { type: String }
+        city: { type: String },
+        lat: { type: Number },
+        lng: { type: Number }
     },
 
     createDate: { type: Date },
     deliveryDate: { type: Date },
     status: [{ state: { type: String }, dataState: { type: Date } }],
     totalPrice: { type: Number },
+    comment: { type: String },
 
     menus: [{
         name: { type: String },
