@@ -14,8 +14,8 @@ exports.updateIngredientById = (req, res) => ApiHelper.updateModelById(req, res,
 exports.findAllIngredients = (req, res) => ApiHelper.findAllModels(req, res, Ingredient);
 
 exports.findIngredient = (req, res) => {
-    let conditions = { name: req.query.name };
-    ApiHelper.findOneModel(req, res, Ingredient, conditions);
+    let conditions = { name: {$regex: req.query.name,$options:'i'}};
+    ApiHelper.findModels(req, res, Ingredient, conditions);
 }
 
 exports.findIngredients = (req, res) => {
