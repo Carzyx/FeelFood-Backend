@@ -29,7 +29,9 @@ let restaurantSchema = new mongoose.Schema({
             address: { type: String },
             postalCode: { type: Number },
             country: { type: String },
-            city: { type: String }
+            city: { type: String },
+            lat: { type: Number },
+            lng: { type: Number }
         }],
         validate: [arrayLimit, '{PATH} exceeds the limit of 1']
     },

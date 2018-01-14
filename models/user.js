@@ -28,7 +28,9 @@ let userSchema = new mongoose.Schema({
         address: { type: String },
         postalCode: { type: Number },
         country: { type: String },
-        city: { type: String }
+        city: { type: String },
+        lat: { type: Number },
+        lng: { type: Number }
     }],
     allergies: [{
         name: String
