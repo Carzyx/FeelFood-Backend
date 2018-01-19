@@ -75,7 +75,7 @@ exports.findRestaurantPublic = (req, res) => {
 
 exports.findRestaurant = (req, res) => {
     let conditions = { _id: req.query.id };
-    ApiHelper.findOneModel(req, res, Restaurant, conditions);
+    ApiHelper.findOneModel(req, res, Restaurant, conditions, 'orders');
 };
 exports.findRestaurantByName = (req, res) => {
     // conditions = {$text:{ $search:req.body.name }};

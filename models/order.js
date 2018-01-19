@@ -8,6 +8,7 @@ mongoose.Promise = global.Promise;
 let orderSchema = new mongoose.Schema({
     restaurant_id: { type: Schema.Types.ObjectId, ref: 'restaurants' },
     restaurant: { type: String },
+    restaurantPhone: { type: String},
     restaurant_location: {
         locationName: { type: String },
         address: { type: String },
@@ -18,7 +19,8 @@ let orderSchema = new mongoose.Schema({
         lng: { type: Number }
     },
 
-    username_id: { type: Schema.Types.ObjectId, ref: 'users' },
+    user_id: { type: Schema.Types.ObjectId, ref: 'users' },
+    userName: { type: String },
     firstName: { type: String },
     lastName: { type: String },
     user_location: {
@@ -31,13 +33,17 @@ let orderSchema = new mongoose.Schema({
         lng: { type: Number }
     },
 
-    createDate: { type: Date },
+    createDate: { type: Date, default: Date.now() },
     deliveryDate: { type: Date },
-    status: [{ state: { type: String }, dataState: { type: Date } }],
+    status: [{ state: {
+            type: String,
+            enum: ['Requested', 'Refused', 'Accepted', 'Delivered'],
+            default: 'Requested'
+        }, dataState: { type: Date, default: Date.now() } }],
     totalPrice: { type: Number },
     comment: { type: String },
 
-    menus: [{
+    menuDetails: [{
         name: { type: String },
         description: { type: String },
         visible: { type: Boolean },
@@ -50,7 +56,14 @@ let orderSchema = new mongoose.Schema({
         drinksOptions: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
         othersOptions: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
     }],
-    dishes: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
+    dishesDetails: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
+});
+
+orderSchema.pre('save', function (next) {
+    if (this.status.length === 0) {
+        this.status.push('Requested');
+        next();
+    } else return next();
 });
 
 let model = mongoose.model('orders', orderSchema);

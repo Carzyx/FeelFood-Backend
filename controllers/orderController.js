@@ -6,10 +6,34 @@ const Order = require('../models/order'),
     Restaurant = require('../models/restaurant');
 
 exports.addOrder = (req, res) => {
-    let conditions = { createDate: req.body.createDate };
-
-    ApiHelper.addModel(req, res, Order, conditions)
+    console.log(req.body);
+    Order.findOne({createDate: req.body.createDate},function (err, order) {
+        if(err) return res.status(500).send({message : 'Error on data base: ' + err});
+        if(!order){
+            let newOrder = new Order(req.body);
+            newOrder.save()
+                .then(order => {
+                    User.findOneAndUpdate({_id : req.body.user_id}, {$push: {orders: order._id.toString()}}, {new : true})
+                        .then(resp =>{
+                            Restaurant.findOneAndUpdate({_id : req.body.restaurant_id}, {$push: {orders: order._id.toString()}}, {new : true})
+                                .then(resp => res.status(200).send({ message: 'Order successfully created.' }))
+                                .catch(err => res.status(500).send({message : 'Error on save in data base: ' + err}));
+                        })
+                        .catch(err => res.status(500).send({message : 'Error on save in data base: ' + err}));
+                })
+                .catch(err => res.status(500).send({message : 'Error on save in data base: ' + err}));
+        } else return res.status(404).send({message : 'Order already exist'});
+    });
 };
+
+exports.findOrder = (req, res) => {
+    Order.findById(req.query.id, function (err, order) {
+        if (err) return res.status(500).send({message: 'Error on data base: ' + err});
+        if (!order) return res.status(500).send({message: 'Order not found.'});
+        res.status(200).jsonp(order);
+    });
+};
+
 
 exports.deleteOrderById = (req, res) => ApiHelper.deleteModelById(req, res, Order);
 

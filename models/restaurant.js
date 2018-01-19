@@ -1,7 +1,7 @@
 'use strict';
 const mongoose = require('mongoose'),
-    bcrypt = require('bcrypt-nodejs');
-
+    bcrypt = require('bcrypt-nodejs'),
+    Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
 let restaurantSchema = new mongoose.Schema({
@@ -62,6 +62,7 @@ let restaurantSchema = new mongoose.Schema({
     }],
     dishes: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
     avatar: String,
+    orders: [{ type: Schema.Types.ObjectId, ref: 'orders' }],
     signupDate: { type: Date, default: Date.now() },
     lastLogin: Date,
     nextLastLogin: Date

@@ -111,7 +111,8 @@ router.route('/allergies')
     .delete(allergyCtrl.deleteAllergyById);
 
 router.route('/orders')
-    //.get(ordersCtrl.)
-    .post(ordersCtrl.addOrder);
+    .get(passport.authenticate('jwt', { session: false }), ordersCtrl.findOrder)
+    .post(passport.authenticate('jwt', { session: false }), ordersCtrl.addOrder)
+    .put(passport.authenticate('jwt', { session: false }), ordersCtrl.updateOrderById);
 
 module.exports = app;
