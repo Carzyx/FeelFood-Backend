@@ -47,6 +47,10 @@ let restaurantSchema = new mongoose.Schema({
             value: { type: Number }
         }],
     },
+    ratings: [{
+        key: { type: String },
+        value: { type: Number }
+    }],
     menus: [{
         name: { type: String },
         description: { type: String },
