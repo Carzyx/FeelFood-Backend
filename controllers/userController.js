@@ -36,7 +36,7 @@ exports.loginUser = (req, res, next) => {
 };
 
 exports.addUser = (req, res) => {
-    if (!req.body.email || !req.body.password || !req.body.username) {
+    if (!req.body.email || req.body.email === '' || !req.body.password || req.body.password === '' || !req.body.username || req.body.username === '') {
         res.status(400).send({ message: 'Please enter all fields.' });
     } else {
         let conditions = { $or: [{ email: req.body.email }, { username: req.body.username }] };

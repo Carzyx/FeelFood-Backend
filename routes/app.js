@@ -6,7 +6,10 @@ let express = require('express'),
     methodOverride = require('method-override'),
     passport = require('passport'),
     morgan = require('morgan'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    emailHelper = require('../helpers/email'),
+    passwordHelper = require('../helpers/password'),
+    expressValidator = require('express-validator');
 
 require('../helpers/passport')(passport);
 
@@ -16,6 +19,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(expressValidator());
 
 let router = express.Router();
 app.use(router);
@@ -114,5 +118,14 @@ router.route('/orders')
     .get(passport.authenticate('jwt', { session: false }), ordersCtrl.findOrder)
     .post(passport.authenticate('jwt', { session: false }), ordersCtrl.addOrder)
     .put(passport.authenticate('jwt', { session: false }), ordersCtrl.updateOrderById);
+
+router.route('/contact')
+    .post(emailHelper.contactManagement);
+
+router.route('/resetPassword')
+    .post(passwordHelper.forgotPassword);
+
+router.route('/resetPassword/new')
+    .post(passwordHelper.resetPassword);
 
 module.exports = app;
