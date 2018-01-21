@@ -63,7 +63,7 @@ let userSchema = new mongoose.Schema({
     locations: [{
         locationName: { type: String },
         address: { type: String },
-        postalCode: { type: Number },
+        postalCode: { type: String },
         country: { type: String },
         city: { type: String },
         lat: { type: Number },
