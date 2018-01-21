@@ -60,6 +60,7 @@ let restaurantSchema = new mongoose.Schema({
     },
     name: { type: String },
     phone: { type: String },
+    description: { type: String},
     locations: {
         type: [{
             locationName: { type: String },

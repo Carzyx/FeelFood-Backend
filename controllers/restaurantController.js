@@ -48,7 +48,6 @@ exports.deleteRestaurantByName = (req, res) => ApiHelper.deleteModelByName(req, 
 exports.deleteRestaurantById = (req, res) => ApiHelper.deleteModelById(req, res, Restaurant);
 
 exports.updateRestaurantById = (req, res) => {
-    console.log(req.body)
     if (req.body.password) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) return err;
@@ -58,6 +57,7 @@ exports.updateRestaurantById = (req, res) => {
             });
         });
     }
+    console.log(req.body._id)
     ApiHelper.updateModelById(req, res, Restaurant);
 };
 
@@ -92,15 +92,27 @@ exports.findRestaurantsNamesByName = (req, res) => {
 };
 exports.findRestaurantByConditions = (req, res) => {
     var conditions = {};
-    console.log(req.body);
     if (req.body.homeDelivery)
         conditions["tags.homeDelivery"]=req.body.homeDelivery  ;
     if (req.body.takeAway)
         conditions ["tags.takeAway"]=req.body.takeAway ;
+    if (req.body.priceMin)
+        conditions["tags.average.dish"] = { $gte: req.body.priceMin };
+    if (req.body.priceMax){
+        if(!conditions["tags.average.dish"])
+            conditions["tags.average.dish"] = { $lt: req.body.priceMax };
+        else
+        conditions["tags.average.dish"]["$lt"] = req.body.priceMax;
+    }
+
     // if ((req.body.takeAway)&&(req.body.homeDelivery))
     //     conditions = { "tags.homeDelivery": req.body.homeDelivery  , "tags.takeAway": req.body.takeAway };
-    if ((req.body.priceMin)||(req.body.priceMax))
-        conditions["tags.average.dish"]={ $lt: req.body.priceMax, $gte: req.body.priceMin };
+    console.log(req.body);
     console.log(conditions);
-    ApiHelper.findModels(req, res, Restaurant, conditions);
+    if(req.body.distanceMin||req.body.distanceMax) {
+        ApiHelper.findByDistance(req, res, Restaurant, conditions);
+
+    }
+    else
+        ApiHelper.findModels(req, res, Restaurant, conditions);
 };
