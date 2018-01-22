@@ -76,7 +76,7 @@ exports.setToken = (req, res) => {
         if (!err && user != null) {
             user.set({ token: token });
             user.save()
-                .then(resp => res.redirect('http://localhost:4200/auth/' + req.user._doc.username + '/' + req.user._doc.tokenFb))
+                .then(resp => res.redirect(config.publicAddress + ':4200/auth/' + req.user._doc.username + '/' + req.user._doc.tokenFb))
                 .catch(err => console.log(err));
         }
     });

@@ -11,6 +11,7 @@ let express = require('express'),
     passwordHelper = require('../helpers/password'),
     imageHelper = require('../helpers/images'),
     multer = require('multer'),
+    config = require('./config'),
     expressValidator = require('express-validator');
 
 require('../helpers/passport')(passport);
@@ -63,7 +64,7 @@ router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope: ['email'] }));
 
 router.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', { session: false, failureRedirect: 'http://localhost:4200/login' }), userCtrl.setToken);
+    .get(passport.authenticate('facebook', { session: false, failureRedirect: config.publicAddress + ':4200/login' }), userCtrl.setToken);
 
 router.route('/auth/facebook/user')
     .post(userCtrl.loginUserFacebook);
