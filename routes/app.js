@@ -9,6 +9,8 @@ let express = require('express'),
     jwt = require('jsonwebtoken'),
     emailHelper = require('../helpers/email'),
     passwordHelper = require('../helpers/password'),
+    imageHelper = require('../helpers/images'),
+    multer = require('multer'),
     expressValidator = require('express-validator');
 
 require('../helpers/passport')(passport);
@@ -23,6 +25,7 @@ app.use(expressValidator());
 
 let router = express.Router();
 app.use(router);
+app.use(multer);
 
 // Log requests to console
 router.use(morgan('dev'));
@@ -127,5 +130,11 @@ router.route('/resetPassword')
 
 router.route('/resetPassword/new')
     .post(passwordHelper.resetPassword);
+
+router.route('/images/avatar')
+    .post(passport.authenticate('jwt', { session: false }), imageHelper.avatarUpload);
+
+router.route('/images/restaurant')
+    .post(passport.authenticate('jwt', { session: false }), imageHelper.imageUpload);
 
 module.exports = app;

@@ -80,7 +80,7 @@ let userSchema = new mongoose.Schema({
         enum: ['Client', 'Restaurant', 'Admin'],
         default: 'Client'
     },
-    avatar: String,
+    avatar: { type: String, default: 'http://res.cloudinary.com/feelfood/image/upload/v1516566306/avatar/defaultAvatar.png' },
     signupDate: { type: Date, default: Date.now() },
     lastLogin: Date,
     nextLastLogin: Date,

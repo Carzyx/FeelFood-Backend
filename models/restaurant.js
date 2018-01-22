@@ -102,15 +102,26 @@ let restaurantSchema = new mongoose.Schema({
         othersOptions: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }]
     }],
     dishes: [{ name: { type: String }, description: { type: String }, price: { type: Number }, ingredients: [{ ingredient: { type: String }, calories: { type: Number }, weight: { type: Number } }], stock: { type: Number }, totalCalories: { type: Number } }],
-    avatar: String,
+    avatar: { type: String, default: 'http://res.cloudinary.com/feelfood/image/upload/v1516566306/avatar/defaultAvatar.png' },
     orders: [{ type: Schema.Types.ObjectId, ref: 'orders' }],
     signupDate: { type: Date, default: Date.now() },
     lastLogin: Date,
-    nextLastLogin: Date
+    nextLastLogin: Date,
+    images: {
+        type:[{
+            name: String,
+            url: String
+        }],
+        validate: [arrayLimitImages, '{PATH} exceeds the limit of 4']
+    },
 });
 
 function arrayLimit(val) {
     return val.length <= 1;
+}
+
+function arrayLimitImages(val) {
+    return val.length <= 4;
 }
 
 restaurantSchema.plugin(titlize, {

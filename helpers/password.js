@@ -115,7 +115,7 @@ exports.resetPassword = (req, res) => {
                                 });
                             })
                             .catch(err => res.status(500).send({message: 'Error on save in data base: ' + err}));
-                    } else return res.status(404).send({message: 'Wrong token provided.'});
+                    } else return res.status(400).send({message: 'Wrong token provided.'});
                 });
             } else if (user.resetToken && (user.resetToken = req.body.token)) {
                 user.resetToken = undefined;
@@ -126,7 +126,7 @@ exports.resetPassword = (req, res) => {
                         return res.status(200).send({success: true, message: 'Your password has been changed.'});
                     })
                     .catch(err => res.status(500).send({message: 'Error on save in data base: ' + err}));
-            } else return res.status(404).send({message: 'Wrong token provided.'});
+            } else return res.status(400).send({message: 'Wrong token provided.'});
         });
     }
 };
