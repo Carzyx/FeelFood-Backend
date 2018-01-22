@@ -5,6 +5,9 @@
     "main": "app.js",
     "author": "FeelFood contributors",
     "license": "MIT",
+    "scripts": {
+        "start": "node index.js"
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/FeelFood/FeelFood_NodeJs.git"
