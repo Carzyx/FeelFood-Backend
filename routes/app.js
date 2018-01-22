@@ -11,7 +11,7 @@ let express = require('express'),
     passwordHelper = require('../helpers/password'),
     imageHelper = require('../helpers/images'),
     multer = require('multer'),
-    config = require('./config'),
+    config = require('../config/config'),
     expressValidator = require('express-validator');
 
 require('../helpers/passport')(passport);
