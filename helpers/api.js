@@ -64,7 +64,6 @@ exports.updateModelById = function (req, res, T) {
     T.findById(req.body._id).exec()
         .then((model) => {
             if (model) {
-                //var model = updateModel(model, req.body);
                 model.update(req.body)
                     .then(resp => res.status(200).send({ message: `${T.modelName} successfully updated.` }))
             }
@@ -72,7 +71,7 @@ exports.updateModelById = function (req, res, T) {
                 res.status(200).send({ message: `Can't find ${T.modelName} to update with id: ${req.body.id} .` });
             }
         })
-        .catch(err => res.status(500).send({ message: `There was an error updating ${T.modelName}, please try again later.`, error: err.message }));
+        .catch(err => {console.log(err);res.status(500).send({ message: `There was an error updating ${T.modelName}, please try again later.`, error: err.message })});
 };
 
 exports.findAllModels = function (req, res, T) {
@@ -96,7 +95,34 @@ exports.findModels = function (req, res, T, condition, population) {
     T.find(condition)
         .then(resp => res.status(200).jsonp(resp))
         .catch(err => res.status(500).send(`There was an error searching all ${T.modelName}, please try again later. Error: ${err.message}`));
+}
+exports.findByDistance = (req,res, T,conditions) => {
+    let resp = [];
+    T.find(conditions).then(list => {
+        for (let i = 0;(i < list.length)&&(resp.length < 10);i++) {
+            let dis = getKilometros(req.body.location.lat,req.body.location.lng,list[i].locations[0].lat,list[i].locations[0].lng)
+            if(( dis < req.body.distanceMax)&&( dis > req.body.distanceMin))
+                resp.push(list[i]);
+        }
+        res.status(200).jsonp(resp)
+    })
+    .catch(err => res.status(500).send(`There was an error searching ${T.modelName}, please try again later. Error: ${err.message}`));
+
+
+
+}
+var getKilometros = function(lat1,lon1,lat2,lon2)
+{
+    let rad = function(x) {return x*Math.PI/180;}
+    let R = 6378.137; //Radio de la tierra en km
+    let dLat = rad( lat2 - lat1 );
+    let dLong = rad( lon2 - lon1 );
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let d = R * c;
+    return d.toFixed(3); //Retorna tres decimales
 };
+
 
 //NOT WORKS, HOW CAN I DO A PARTIAL MAPPING?
 function updateModel(oldModel, newModel) {

@@ -12,12 +12,18 @@ exports.addOrder = (req, res) => {
         if(!order){
             let newOrder = new Order(req.body);
             newOrder.save()
-                .then(order => {
+                .then(order => { console.log('ORDER');console.log(order);
                     User.findOneAndUpdate({_id : req.body.user_id}, {$push: {orders: order._id.toString()}}, {new : true})
                         .then(resp =>{
                             Restaurant.findOneAndUpdate({_id : req.body.restaurant_id}, {$push: {orders: order._id.toString()}}, {new : true})
-                                .then(resp => res.status(200).send({ message: 'Order successfully created.' }))
-                                .catch(err => res.status(500).send({message : 'Error on save in data base: ' + err}));
+                                .then(resp => {
+                                    for(let i=0; i<sockets.length; i++ ) {
+                                        if(sockets[i].id = req.body.restaurant_id)
+                                            sockets[i].socket.emit('update');
+                                    }
+                                    res.status(200).send({ message: 'Order successfully created.' })
+                                })
+                                .catch(err => res.status(500).send({message : 'Error on save in data base socket: ' + err}));
                         })
                         .catch(err => res.status(500).send({message : 'Error on save in data base: ' + err}));
                 })

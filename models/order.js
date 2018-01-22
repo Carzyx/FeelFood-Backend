@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 let orderSchema = new mongoose.Schema({
     restaurant_id: { type: Schema.Types.ObjectId, ref: 'restaurants' },
     restaurant: { type: String },
-    restaurantPhone: { type: String},
+    restaurantPhone: { type: String },
     restaurant_location: {
         locationName: { type: String },
         address: { type: String },
@@ -35,12 +35,15 @@ let orderSchema = new mongoose.Schema({
 
     createDate: { type: Date, default: Date.now() },
     deliveryDate: { type: Date },
-    status: [{ state: {
+    status: [{
+        state: {
             type: String,
             enum: ['Requested', 'Refused', 'Accepted', 'Delivered'],
             default: 'Requested'
-        }, dataState: { type: Date, default: Date.now() } }],
+        }, dataState: { type: Date, default: Date.now() }
+    }],
     totalPrice: { type: Number },
+    isRated: { type: Boolean },
     comment: { type: String },
 
     menuDetails: [{

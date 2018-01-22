@@ -109,6 +109,7 @@ router.route('/ingredient')
     .post(ingredientCtrl.addIngredient)
     .delete(ingredientCtrl.deleteIngredientById)
     .put(ingredientCtrl.updateIngredientById);
+
 router.route('/ingredients')
     .get(ingredientCtrl.findAllIngredients);
 
