@@ -4,13 +4,15 @@ services:
     container_name: app
     restart: always
     build: FeelFood-Backend
-    environment:
-      - VIRTUAL_HOST=feelfood-backend.gq
-      - VIRTUAL_PORT=3001
+#    environment:
+#      - VIRTUAL_HOST=feelfood-backend.gq
+#      - VIRTUAL_PORT=3001
+    ports:
+      - "3001:3001"
     links:
       - mongo
-    networks:
-      - proxy
+#    networks:
+#      - proxy
 
   mongo:
     container_name: mongo
@@ -24,22 +26,24 @@ services:
     container_name: angular
     restart: always
     build: FeelFood-Frontend
-    environment:
-      - VIRTUAL_HOST=feelfood.gq
-      - VIRTUAL_PORT=4200
-    networks:
-      - proxy
-
-  proxy:
-    image: jwilder/nginx-proxy
-    volumes:
-      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
-      - "80:80"
-    networks:
-      - proxy
+      - "4200:4200"
+#    environment:
+##     - VIRTUAL_HOST=feelfood.gq
+#      - VIRTUAL_PORT=4200
+#    networks:
+#      - proxy
 
-networks:
-  proxy:
-    driver: bridge
+#  proxy:
+#    image: jwilder/nginx-proxy
+#    volumes:
+#      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#    ports:
+#      - "80:80"
+#    networks:
+#      - proxy
+#
+#networks:
+#  proxy:
+#    driver: bridge
