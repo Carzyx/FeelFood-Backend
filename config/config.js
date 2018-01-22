@@ -1,6 +1,6 @@
 module.exports = {
     port: process.env.PORT || 3001,
-    uri: process.env.MONGODB_URI || 'mongodb://147.83.7.156:27017/FeelFoodDB',
+    uri: process.env.MONGODB_URI || 'mongodb://mongo/FeelFoodDB',
     secret: '582599e1a882e49aa86b8b181a816b86',
     facebook: {
         id: '335064893632218',
